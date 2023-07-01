@@ -1,14 +1,14 @@
 blank_issues_enabled: false
 contact_links:
+  - name: 이슈 발행
+    url: https://github.com/hyezoprk/hyezoEditor/issues/new?template=issue_template.md
+    about: If you've already asked for help with a problem and confirmed something is broken, create a issue report.
   - name: 질문
     url: https://github.com/hyezoprk/hyezoEditor/discussions/new?category=help
     about: If you can't get something to work the way you expect, open a question in our discussion forums.
   - name: 기능 요청
     url: https://github.com/hyezoprk/hyezoEditor/discussions/new?category=ideas
     about: 'Suggest any ideas you have using our discussion forums.'
-  - name: 버그 신고
-    url: https://github.com/hyezoprk/hyezoEditor/issues/new?template=issue_template.md
-    about: If you've already asked for help with a problem and confirmed something is broken with Tailwind CSS itself, create a bug report.
-  - name: 덕담
+  - name: 아무말
     url: https://github.com/hyezoprk/hyezoEditor/discussions/new?category=%EB%8B%A4%EC%A0%95%ED%95%9C-%EB%A7%90
-    about: 'For documentation issues, suggest changes on our documentation repository.'
+    about: 'Anything you want to say to me 😛'
