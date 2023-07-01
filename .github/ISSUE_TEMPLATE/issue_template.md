@@ -1,6 +1,6 @@
 ---
-name: ''
-about: ''
+name: '이슈 템플릿'
+about: '이슈 신고'
 title: ''
 labels: ''
 assignees: ''
