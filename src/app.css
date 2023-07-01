@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		/* Daisy UI 컬러 */
+		--p: 20deg 100% 70%;
+		--pf: 20deg 91% 60%;
+		--pc: 21deg 100% 94%;
+		--s: 239deg 95% 52%;
+		--a: 198deg 93% 60%;
+		--n: 214deg 20% 21%;
+		--in: 225deg 63% 33%;
+		--suc: 158deg 64% 52%;
+		--wa: 43deg 96% 56%;
+		--er: 0deg 91% 71%;
+		--b1: 0deg 0% 100%;
+		/* 컬러 */
+		--bkg: 49deg 35% 94%;
+		--content: 217deg 32.6% 17.5%;
+		/* 높이 */
+		--navHeight: 3.5rem;
+		/* 넓이 */
+		--scrollbarWidth: 1px;
+	}
+
+	:root[data-theme='dark'] {
+		--p: 49deg 35% 94%;
+		--pf: 20deg 91% 60%;
+		--pc: 21deg 100% 94%;
+		--s: 239deg 95% 52%;
+		--a: 220deg 26% 14%;
+		--n: 220deg 26% 14%;
+		--in: 220deg 26% 14%;
+		--suc: 220deg 26% 14%;
+		--wa: 220deg 26% 14%;
+		--er: 220deg 26% 14%;
+		--b1: 220deg 26% 14%;
+
+		--bkg: 218deg 13% 12%;
+		--content: 0deg 2% 95%;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--p: 20deg 100% 70%;
+			--pf: 20deg 91% 60%;
+			--pc: 21deg 100% 94%;
+			--s: 225deg 63% 33%;
+			--a: 198deg 93% 60%;
+			--n: 214deg 20% 21%;
+			--in: 225deg 63% 33%;
+			--suc: 158deg 64% 52%;
+			--wa: 43deg 96% 56%;
+			--er: 0deg 91% 71%;
+			--b1: 0deg 0% 100%;
+
+			--bkg: 49deg 35% 94%;
+			--content: 217deg 32.6% 17.5%;
+		}
+	}
+
+	@media (prefers-reduced-motion) {
+		body,
+		html {
+			@apply scroll-auto;
+		}
+	}
+
+	body {
+		@apply bg-bkg;
+	}
+
+	::-webkit-scrollbar {
+		@apply w-scrollbarWidth;
+	}
+
+	::-webkit-scrollbar-track {
+		@apply bg-transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		@apply rounded-3xl bg-primary bg-clip-padding;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		@apply bg-accent;
+	}
+}
+
+@font-face {
+	font-family: 'LINESeedKR-Rg';
+	src: url('/fonts/LINESeedKR-Rg.woff2') format('woff2');
+	font-weight: normal;
+	font-display: block;
+}
