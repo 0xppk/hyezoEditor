@@ -16,12 +16,7 @@ export const load = (async ({ cookies, locals: { supabase, getSession } }) => {
 
 	return {
 		theme: cookies.get('siteTheme'),
-		session: {
-			...session,
-			user: {
-				...session?.user,
-				username,
-			},
-		},
+		session,
+		username,
 	};
 }) satisfies ServerLoad;

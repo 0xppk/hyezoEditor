@@ -52,7 +52,7 @@ export const actions = {
 		} catch (err) {
 			if (err instanceof z.ZodError) {
 				const { fieldErrors: errors } = err.flatten();
-				console.log(errors);
+
 				const { email, password, ...rest } = formData;
 				return {
 					data: rest,
