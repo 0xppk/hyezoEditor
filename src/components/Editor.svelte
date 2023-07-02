@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { countWords } from '$lib/utils';
+	import { postResponseSuccess } from '$lib/zodSchema';
 	import { fail } from '@sveltejs/kit';
 
 	export let content: string;
@@ -19,7 +20,7 @@
 				body: JSON.stringify({ title, content, words_count, archive_name }),
 			}).then(res => res.json());
 
-			return result;
+			return postResponseSuccess.parse(result);
 		} catch (e) {
 			return fail(500, { message: '서버 에러', success: false });
 		}
@@ -53,8 +54,7 @@
 				e.preventDefault();
 				contentDiv.focus();
 			}
-		}}
-	/>
+		}} />
 	<article
 		class="px-5 py-8 outline-none"
 		aria-label="본문 영역 글쓰기 에디터"
@@ -62,8 +62,7 @@
 		spellcheck="false"
 		bind:this={contentDiv}
 		bind:innerHTML={content}
-		on:input={() => youtubeFormatter(content)}
-	/>
+		on:input={() => youtubeFormatter(content)} />
 
 	<div class="flex items-center justify-end gap-3 border-t border-primary/50 p-2">
 		<input bind:value={archive_name} type="text" />
@@ -73,13 +72,12 @@
 			on:click={async () => {
 				alert('작성하신 글을 공개합니다. \n 공개 후 1주일은 수정이 불가능합니다.');
 				const result = await addNewPost();
-				if (result.success) {
+				if ('success' in result) {
 					const id = result.data.id;
 					await updatePublicity({ id, status: 'public' });
 					goto('/archive');
 				}
-			}}
-		>
+			}}>
 			발행
 		</button>
 		<button
@@ -87,7 +85,8 @@
 				await addNewPost();
 				goto('/archive');
 			}}
-			class="btn-primary btn-outline btn-sm btn w-14">저장</button
-		>
+			class="btn-primary btn-outline btn-sm btn w-14">
+			저장
+		</button>
 	</div>
 </article>

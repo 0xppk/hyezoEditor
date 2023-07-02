@@ -7,6 +7,10 @@ export const handle = (async ({ event, resolve }) => {
 		supabaseUrl: PUBLIC_SUPABASE_URL,
 		supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
 		event,
+		cookieOptions: {
+			sameSite: 'lax',
+			secure: new URL(event.url.origin).protocol === 'https:',
+		},
 	});
 
 	event.locals.getSession = async () => {

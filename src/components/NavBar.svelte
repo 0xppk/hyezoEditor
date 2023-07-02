@@ -56,10 +56,12 @@
 			{/each}
 		</ul>
 		<Icons icon="pause" size="20" className="text-content/30" />
-		<button class="btn-ghost btn text-lg" on:click={() => goto('/profile')}>
-			<Icons icon="user" size="20" />
-		</button>
-		<button class="btn-ghost btn text-lg" on:click={toggleTheme}>
+		<Icons icon="user" size="20" href="/profile" />
+
+		<button
+			class="btn-ghost btn text-lg"
+			on:click={toggleTheme}
+			aria-label={`다크모드 토글 스위치. 현재 테마는 ${currentTheme}`}>
 			{renderThemeIcon()}
 		</button>
 	</div>

@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { NavBar } from '@components';
 	import '../app.css';
-	import { NavBar, SideBar } from '@components';
 </script>
 
 <div class="min-h-screen w-layoutWidth text-base text-content">
@@ -9,4 +9,3 @@
 		<slot />
 	</main>
 </div>
-

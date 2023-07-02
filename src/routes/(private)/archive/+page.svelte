@@ -13,7 +13,6 @@
 		posts[i].content = convertedValue;
 	};
 
-
 	$: ({ session } = data);
 </script>
 
@@ -25,11 +24,10 @@
 			{index}
 			{originalContents}
 			{isEdited}
-			{youtubeFormatter}
-		/>
+			{youtubeFormatter} />
 	{/each}
 {:else}
 	<div class="flex flex-col">
-		<h2 class="text-secondary">{session?.user?.username}'s Archive</h2>
+		<h2 class="text-secondary">'s Archive</h2>
 	</div>
 {/if}
