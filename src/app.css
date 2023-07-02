@@ -23,6 +23,7 @@
 		--navHeight: 3.5rem;
 		/* 넓이 */
 		--scrollbarWidth: 1px;
+		--sidebar: 12rem;
 	}
 
 	:root[data-theme='dark'] {
