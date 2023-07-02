@@ -1,22 +1,20 @@
 // See https://kit.svelte.dev/docs/types#app
-import type { Cookies } from '@sveltejs/kit';
 import { SupabaseClient, Session } from '@supabase/supabase-js';
 
 declare global {
 	namespace App {
-		interface Error {}
+		// interface Error {}
 		interface Locals {
-			supabase: SupabaseClient<Database>;
+			supabase: SupabaseClient;
 			getSession(): Promise<Session | null>;
 		}
 		interface PageData {
 			session: Session | null;
 			theme?: string;
+			username: string | null;
 		}
-		interface User {
-			username?: string;
-		}
-		interface Platform {}
+		// interface User {}
+		// interface Platform {}
 	}
 }
 

@@ -5,8 +5,6 @@ declare global {
 	type TArchive = z.infer<typeof archiveSchema>;
 }
 
-type Database = {};
-
 export const statusSchema = z.enum(['public', 'private']);
 
 export const loginSchema = z.object({
