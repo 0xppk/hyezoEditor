@@ -6,7 +6,7 @@ module.exports = {
 	trailingComma: 'all',
 	printWidth: 100,
 	arrowParens: 'avoid',
-	bracketSameLine: false,
+	bracketSameLine: true,
 	pluginSearchDirs: ['.'],
 	plugins: [import('prettier-plugin-svelte'), import('prettier-plugin-tailwindcss')],
 	overrides: [{ files: '*.svelte', options: { parser: 'svelte' } }],
