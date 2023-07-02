@@ -1,13 +1,7 @@
-type TIconSetup = 'chevronLeft' | 'chevronRight' | 'pause' | 'user';
+/** 
+ * 데이터베이스 타입은 `zodSchema`에 정의됨
+ * @see '$lib/zodSchema'
+ */
 
-type TPost = {
-	id: number;
-	archive_name: string;
-	author_id: string;
-	title: string;
-	content: string;
-	words_count: number;
-	created_at: string;
-	updated_at?: string | null;
-	status: 'public' | 'private';
-};
+// Hero 아이콘 컴퍼넌트
+type TIconSetup = 'chevronLeft' | 'chevronRight' | 'pause' | 'user' | 'plus' | 'archiveBox';
