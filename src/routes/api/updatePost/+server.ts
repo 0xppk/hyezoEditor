@@ -39,5 +39,5 @@ export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
 		return postSchema.parse(refinedPost);
 	})();
 
-	return json({ updatedPost, success: true }, { status: 201 });
+	return json({ data: updatedPost, success: true }, { status: 201 });
 }) satisfies RequestHandler;
