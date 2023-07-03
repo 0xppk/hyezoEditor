@@ -46,7 +46,7 @@ export default {
 			},
 		},
 		fontFamily: {
-			sans: ['LINESeedKR-Rg', ...defaultTheme.fontFamily.sans],
+			sans: ['Pretendard', ...defaultTheme.fontFamily.sans],
 			serif: [...defaultTheme.fontFamily.serif],
 			mono: [...defaultTheme.fontFamily.mono],
 		},
