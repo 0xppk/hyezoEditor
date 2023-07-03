@@ -5,7 +5,9 @@ export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session) throw error(500, { message: '다시 로그인해 주세요' });
 
-	const { title, content, words_count, archive_name } = postSchema.parse(await request.json());
+	const { title, content, words_count, archive_name } = postSchema
+		.omit({ id: true, status: true })
+		.parse(await request.json());
 
 	// 아카이브 업데이트
 	// 기존 아카이브에 추가할 수도 있다
@@ -39,6 +41,7 @@ export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 	}
 
 	const postId = numberIdParser(postData)[0].id;
+
 	// 성공
 	return json({ data: { id: postId }, success: true }, { status: 201 });
 }) satisfies RequestHandler;

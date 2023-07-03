@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { countWords } from '$lib/utils';
-	import { updateResponseSuccess } from '$lib/zodSchema';
+	import { updatePostResponseSuccess } from '$lib/zodSchema';
 	import { fail } from '@sveltejs/kit';
 	import { afterUpdate } from 'svelte';
 
@@ -41,7 +41,7 @@
 				}),
 			}).then(res => res.json());
 
-			const { data: updatedPost } = updateResponseSuccess.parse(result);
+			const { data: updatedPost } = updatePostResponseSuccess.parse(result);
 
 			originalContents[index].content = updatedPost.content;
 			isEdited[index] = false;

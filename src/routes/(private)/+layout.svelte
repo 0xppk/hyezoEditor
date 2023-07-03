@@ -1,12 +1,14 @@
 <script lang="ts">
-	import { archive } from '$lib/stores/archive.js';
-	import { SideBar } from '@components';
+	import { getArchive, setArchive } from '$lib/context/archive.js';
 
 	export let data;
-	const { archiveData } = data;
+	let { archiveData } = data;
+	$: ({ archiveData } = data);
+
+	setArchive();
+	if (archiveData?.length) getArchive().syncWith(archiveData);
 </script>
 
 <div class="grid w-full min-w-min place-items-center">
-	<SideBar {archiveData} />
 	<slot />
 </div>

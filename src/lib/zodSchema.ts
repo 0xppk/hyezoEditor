@@ -3,6 +3,7 @@ import { z } from 'zod';
 declare global {
 	type TPost = z.infer<typeof postSchema>;
 	type TArchive = z.infer<typeof archiveSchema>;
+	type TPostStatus = z.infer<typeof statusSchema>;
 }
 
 export const statusSchema = z.enum(['public', 'private']);
@@ -13,19 +14,19 @@ export const loginSchema = z.object({
 });
 
 export const postSchema = z.object({
-	id: z.number().optional(),
+	id: z.number(),
 	archive_name: z.string().min(1),
 	title: z.string().min(1),
 	content: z.string().min(1),
 	words_count: z.number(),
-	status: statusSchema.optional(),
+	status: statusSchema,
 });
 export const postsSchema = z.array(postSchema);
-export const createResponseSuccess = z.object({
+export const createPostResponseSuccess = z.object({
 	data: postSchema.pick({ id: true }),
 	success: z.boolean(),
 });
-export const updateResponseSuccess = z.object({
+export const updatePostResponseSuccess = z.object({
 	data: postSchema,
 	success: z.boolean(),
 });
@@ -42,7 +43,7 @@ export const archiveSchema = z.object({
 	due_date: z.string().nullable(),
 	word_goal: z.number().nullable(),
 });
-export const archivesSchema = z.array(archiveSchema.pick({ id: true, name: true }));
+export const archivesSchema = z.array(archiveSchema);
 export const archiveResponseSuccess = z.object({
 	message: z.string(),
 	success: z.boolean(),

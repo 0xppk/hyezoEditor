@@ -7,7 +7,7 @@ export const load = (async ({ request, locals: { supabase, getSession } }) => {
 
 	const { data, error } = await supabase
 		.from('archives')
-		.select('name, id')
+		.select('*')
 		.eq('author_id', userId)
 		.order('created_at', { ascending: true });
 

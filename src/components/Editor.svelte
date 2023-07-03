@@ -1,46 +1,67 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { archive } from '$lib/stores/archive';
-	import { countWords } from '$lib/utils';
-	import { createResponseSuccess } from '$lib/zodSchema';
+	import { getArchive } from '$lib/context/archive';
+	import { countWords, fetcher } from '$lib/utils';
+	import { createPostResponseSuccess } from '$lib/zodSchema';
 	import { fail } from '@sveltejs/kit';
 
 	export let content: string;
 	export let youtubeFormatter: (value: string) => void;
-
 	let title: string;
-
+	let archive_name: string = '';
+	let contentDiv: HTMLElement;
 	$: words_count = countWords(content);
 
-	let contentDiv: HTMLElement;
+	// 스토어 변수
+	const archives = getArchive();
 
+	// 포스트 함수
 	async function addNewPost() {
 		try {
-			const result = await await fetch('/api/addPost', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ title, content, words_count, archive_name: $archive }),
-			}).then(res => res.json());
+			const res = await fetcher('/api/addPost', 'POST', {
+				title,
+				content,
+				words_count,
+				archive_name,
+			});
+			const result = createPostResponseSuccess.parse(res);
 
-			return createResponseSuccess.parse(result);
+			return result;
 		} catch (e) {
-			return fail(500, { message: '서버 에러', success: false });
+			return fail(500, { message: '포스트 만들기 실패', success: false });
 		}
 	}
 
 	async function updatePublicity({ id, status }: Partial<TPost>) {
 		try {
-			await fetch('/api/updatePost', {
-				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					id,
-					status,
-				}),
+			await fetcher('/api/updatePost', 'PATCH', {
+				id,
+				status,
 			});
 		} catch (error) {
-			return fail(500, { message: '서버 에러', success: false });
+			return fail(500, { message: '포스트 공개/비공개 업데이트 실패', success: false });
 		}
+	}
+
+	// 아카이브 함수
+	async function addArchive(index: number) {
+		await fetcher<TArchive>('/api/addArchive', 'POST', {
+			name: archive_name,
+		});
+		archives.updateName(archive_name, index);
+	}
+
+	async function updateArchive(id: string, index: number) {
+		await fetcher('/api/updateArchive', 'PATCH', {
+			id,
+			name: $archives[index].name,
+		});
+	}
+
+	async function deleteArchive(id: string) {
+		await fetcher('/api/deleteArchive', 'DELETE', {
+			id,
+		});
 	}
 </script>
 
@@ -67,7 +88,27 @@
 		on:change={() => youtubeFormatter(content)} />
 
 	<div class="flex items-center justify-end gap-3 border-t border-primary/50 p-2">
-		<span class="flex-grow">🗂️ {$archive}</span>
+		<span class="dropdown flex-grow">
+			<button class="btn-ghost btn">🗂️ {archive_name}</button>
+			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+			<ul tabindex="0" class="dropdown-content menu rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
+				<li class="pointer-events-none"><span>Archives</span></li>
+				<hr />
+				{#each $archives as { id, name }, i (id)}
+					<li
+						on:pointerdown={() => {
+							archive_name = name;
+							archives.updateName(name, i);
+							if (document.activeElement instanceof HTMLElement) {
+								document.activeElement.blur();
+							}
+						}}>
+						<span>{name}</span>
+					</li>
+				{/each}
+			</ul>
+		</span>
+
 		<span class="text-right text-primary">word: {countWords(content)}</span>
 		<button
 			class="btn-primary btn-outline btn-sm btn w-14"
