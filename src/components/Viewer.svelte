@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { countWords } from '$lib/utils';
-	import { postSchema } from '$lib/zodSchema';
+	import { updateResponseSuccess } from '$lib/zodSchema';
 	import { fail } from '@sveltejs/kit';
 	import { afterUpdate } from 'svelte';
 
@@ -41,7 +41,7 @@
 				}),
 			}).then(res => res.json());
 
-			const updatedPost = postSchema.parse(result.updatedPost);
+			const { data: updatedPost } = updateResponseSuccess.parse(result);
 
 			originalContents[index].content = updatedPost.content;
 			isEdited[index] = false;
@@ -88,8 +88,7 @@
 					e.preventDefault();
 					contentDiv.focus();
 				}
-			}}
-		/>
+			}} />
 		<article
 			class="px-5 py-8 outline-none"
 			aria-label="본문 영역 글쓰기 에디터"
@@ -100,8 +99,7 @@
 			on:input={() => {
 				toggleEdit(content, index, 'content');
 				youtubeFormatter(content, index);
-			}}
-		/>
+			}} />
 	</section>
 
 	<section class="flex items-center justify-end gap-3 border-t border-primary/50 p-2">
@@ -111,8 +109,7 @@
 		{#if isEdited[index]}
 			<button
 				class="btn-primary btn-outline btn-sm btn w-14"
-				on:click={() => updatePost({ id, content, title, words_count }, index)}>수정</button
-			>
+				on:click={() => updatePost({ id, content, title, words_count }, index)}>수정</button>
 		{:else if status === 'private'}
 			<button
 				class="btn-primary btn-outline btn-sm btn w-14"
@@ -121,8 +118,7 @@
 					alert('작성하신 글을 공개합니다. \n 공개 후 1주일은 수정이 불가능합니다.');
 					updatePublicity({ id, status: 'public' });
 					status = 'public';
-				}}
-			>
+				}}>
 				발행
 			</button>
 		{/if}

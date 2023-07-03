@@ -21,9 +21,12 @@ export const postSchema = z.object({
 	status: statusSchema.optional(),
 });
 export const postsSchema = z.array(postSchema);
-export const postResponseSuccess = z.object({
-	data: z.object({ id: z.number() }),
-	message: z.string(),
+export const createResponseSuccess = z.object({
+	data: postSchema.pick({ id: true }),
+	success: z.boolean(),
+});
+export const updateResponseSuccess = z.object({
+	data: postSchema,
 	success: z.boolean(),
 });
 
@@ -39,8 +42,11 @@ export const archiveSchema = z.object({
 	due_date: z.string().nullable(),
 	word_goal: z.number().nullable(),
 });
-export const archivesSchema = z.array(archiveSchema);
-
+export const archivesSchema = z.array(archiveSchema.pick({ id: true, name: true }));
+export const archiveResponseSuccess = z.object({
+	message: z.string(),
+	success: z.boolean(),
+});
 export const groupSchema = z.object({
 	groupname: z.string().min(1),
 });

@@ -15,3 +15,19 @@ export const converterLtGt = (content: string) => {
 		return replacedContent;
 	}
 };
+
+export const fetcher = async <T extends {}>(
+	url: string,
+	method: 'POST' | 'PATCH' | 'DELETE',
+	data: Partial<T>,
+	options?: RequestInit,
+) => {
+	const res = await fetch(url, {
+		method,
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ ...data }),
+		...options,
+	});
+
+	return await res.json();
+};

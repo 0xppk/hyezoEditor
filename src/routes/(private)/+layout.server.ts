@@ -5,7 +5,11 @@ export const load = (async ({ request, locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	const userId = session?.user.id;
 
-	const { data, error } = await supabase.from('archives').select('*').eq('author_id', userId);
+	const { data, error } = await supabase
+		.from('archives')
+		.select('name, id')
+		.eq('author_id', userId)
+		.order('created_at', { ascending: true });
 
 	if (error) return fail(500, { message: '등록된 아카이브가 없습니다. 😢', success: false });
 

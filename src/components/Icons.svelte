@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import {
 		ArchiveBox,
 		ChevronLeft,
@@ -8,6 +7,7 @@
 		Pause,
 		PlusSmall,
 		UserCircle,
+		Cog6Tooth,
 		type IconSource,
 	} from 'svelte-hero-icons';
 
@@ -15,6 +15,7 @@
 	export let size: string = '36';
 	export let className: string = '';
 	export let href: string | undefined = undefined;
+	export let type: 'solid' | 'outline' | 'mini' = 'outline';
 
 	const config = {
 		chevronLeft: ChevronLeft,
@@ -23,6 +24,7 @@
 		user: UserCircle,
 		plus: PlusSmall,
 		archiveBox: ArchiveBox,
+		setting: Cog6Tooth,
 	} satisfies Record<TIconSetup, IconSource>;
 </script>
 
@@ -31,5 +33,15 @@
 		<svelte:component this={Icon} {size} src={config[icon]} class={className} />
 	</a>
 {:else}
-	<svelte:component this={Icon} {size} src={config[icon]} class={className} />
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<span role="button" tabindex="0" on:click>
+		<svelte:component
+			this={Icon}
+			solid={type === 'solid'}
+			outline={type === 'outline'}
+			mini={type === 'mini'}
+			{size}
+			src={config[icon]}
+			class={className} />
+	</span>
 {/if}
