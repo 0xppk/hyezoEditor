@@ -9,6 +9,6 @@
 	setArchive(archiveData);
 </script>
 
-<div class="grid w-full min-w-min place-items-center">
+<div class="flex h-layoutHeight w-full items-center py-10 sm:block sm:items-start sm:py-60">
 	<slot />
 </div>

@@ -9,9 +9,31 @@ export const countWords = (htmlText: string) => {
 	return words.length;
 };
 
+const youtubeIframe = (src: string) => `
+			<div>
+      <iframe
+        class="rounded-md bg-black"
+        width="100%"
+        height="310"
+        src=${src}
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen/>
+    	</div>
+		`;
+
 export const converterLtGt = (content: string) => {
-	if (content.includes('&lt;') && content.includes('&gt;')) {
-		const replacedContent = content.replace('&lt;', '<').replace('&gt;', '>');
+	// if (content.includes('youtu.be/')) {
+	// 	const src = content.replace('youtu.be/', 'youtube.com/embed/');
+	// 	return youtubeIframe(src);
+	// } else if (content.includes('watch?v=')) {
+	// 	const src = content.replace('watch?v=', 'embed/');
+	// 	console.log(src);
+	// 	console.log(youtubeIframe(src));
+	// 	return youtubeIframe(src);
+	// }
+
+	if (content.includes('style="')) {
+		const replacedContent = content.replace(/style="[^"]*"/g, '');
 		return replacedContent;
 	}
 };

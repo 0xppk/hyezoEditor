@@ -6,6 +6,7 @@
 	const youtubeFormatter = (val: string) => {
 		const convertedValue = converterLtGt(val) ?? '';
 		value = convertedValue;
+		console.log(convertedValue);
 	};
 </script>
 

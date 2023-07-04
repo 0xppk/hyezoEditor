@@ -1,7 +1,6 @@
 <script lang="ts">
+	import { db } from '$lib/db/client';
 	import { countWords } from '$lib/utils';
-	import { updatePostResponseSuccess } from '$lib/zodSchema';
-	import { error } from '@sveltejs/kit';
 	import { afterUpdate } from 'svelte';
 
 	export let post: TPost;
@@ -16,52 +15,17 @@
 	let contentDiv: HTMLElement;
 	let wrapperDiv: HTMLElement;
 
+	// 라이프 사이클
 	function scrollToBottom(el: HTMLElement) {
 		el.scrollTop = el.scrollHeight;
 	}
+	afterUpdate(() => scrollToBottom(wrapperDiv));
 
-	afterUpdate(() => {
-		scrollToBottom(wrapperDiv);
-	});
-
-	async function updatePost(
-		{ id, title, content, words_count, archive_name }: Partial<TPost>,
-		index: number,
-	) {
-		try {
-			const result = await await fetch('/api/updatePost', {
-				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					id,
-					title,
-					content,
-					words_count,
-					archive_name,
-				}),
-			}).then(res => res.json());
-
-			const { data: updatedPost } = updatePostResponseSuccess.parse(result);
-
-			originalContents[index].content = updatedPost.content;
-			isEdited[index] = false;
-		} catch (e) {
-			throw error(500, '포스트 업데이트 에러');
-		}
-	}
-
-	async function updatePublicity({ id, status }: Partial<TPost>) {
-		try {
-			await fetch('/api/updatePost', {
-				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					id,
-					status,
-				}),
-			});
-		} catch (e) {
-			throw error(500, '포스트 공개/비공개 업데이트 에러');
+	// 이벤트 핸들러
+	function onKeyPress(e: KeyboardEvent) {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			contentDiv.focus();
 		}
 	}
 
@@ -72,23 +36,37 @@
 			isEdited[i] = false;
 		}
 	}
+
+	function onChange() {
+		toggleEdit(content, index, 'content');
+		youtubeFormatter(content, index);
+	}
+
+	async function updatePost() {
+		const updatedPost = await db.updatePost({ id, content, title, words_count }, index);
+		originalContents[index].content = updatedPost.content;
+		isEdited[index] = false;
+	}
+
+	function updatePublicity() {
+		db.updatePublicity({ id, status: 'public' });
+		status = 'public';
+	}
 </script>
 
-<article class="mb-20 w-full overflow-hidden rounded-xl border border-primary/50 outline-none">
+<article class="mb-20 w-full overflow-y-hidden rounded-xl border border-primary/50 outline-none">
 	<section bind:this={wrapperDiv} class="max-h-80 overflow-y-scroll scroll-smooth">
+		<!-- 타이틀 -->
 		<input
 			class="mb-5 mt-10 w-full bg-transparent text-center text-3xl font-semibold outline-none placeholder:text-content/30"
 			aria-label="제목 영역 글쓰기 에디터"
 			spellcheck="false"
 			placeholder="제목을 입력해주세요"
 			bind:value={title}
-			on:input={() => toggleEdit(title, index, 'title')}
-			on:keypress={e => {
-				if (e.key === 'Enter') {
-					e.preventDefault();
-					contentDiv.focus();
-				}
-			}} />
+			on:change={() => toggleEdit(title, index, 'title')}
+			on:keypress={onKeyPress}
+		/>
+		<!-- 본문 -->
 		<article
 			class="px-5 py-8 outline-none"
 			aria-label="본문 영역 글쓰기 에디터"
@@ -96,29 +74,23 @@
 			spellcheck="false"
 			bind:this={contentDiv}
 			bind:innerHTML={content}
-			on:input={() => {
-				toggleEdit(content, index, 'content');
-				youtubeFormatter(content, index);
-			}} />
+			on:input={onChange}
+		/>
 	</section>
 
+	<!-- 바텀 바 -->
 	<section class="flex items-center justify-end gap-3 border-t border-primary/50 p-2">
 		<input bind:value={archive_name} type="text" />
 		<span class="text-right text-primary">word: {countWords(content)}</span>
 
 		{#if isEdited[index]}
-			<button
-				class="btn-primary btn-outline btn-sm btn w-14"
-				on:click={() => updatePost({ id, content, title, words_count }, index)}>수정</button>
+			<button class="btn-primary btn-outline btn-sm btn w-14" on:click={updatePost}> 수정 </button>
 		{:else if status === 'private'}
 			<button
 				class="btn-primary btn-outline btn-sm btn w-14"
 				disabled={isEdited[index]}
-				on:click={() => {
-					alert('작성하신 글을 공개합니다. \n 공개 후 1주일은 수정이 불가능합니다.');
-					updatePublicity({ id, status: 'public' });
-					status = 'public';
-				}}>
+				on:click={updatePublicity}
+			>
 				발행
 			</button>
 		{/if}

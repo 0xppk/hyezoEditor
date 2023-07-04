@@ -6,7 +6,7 @@ declare global {
 	type TPostStatus = z.infer<typeof statusSchema>;
 }
 
-export const statusSchema = z.enum(['public', 'private']);
+export const statusSchema = z.enum(['public', 'private']).optional();
 
 export const loginSchema = z.object({
 	email: z.string().email(),

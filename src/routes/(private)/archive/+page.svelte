@@ -28,6 +28,6 @@
 	{/each}
 {:else}
 	<div class="flex flex-col">
-		<h2 class="text-secondary">'s Archive</h2>
+		<h2 class="font-extrabold text-secondary">No posts yet.</h2>
 	</div>
 {/if}

@@ -1,5 +1,5 @@
 import { fetcher } from '$lib/utils';
-import { createPostResponseSuccess } from '$lib/zodSchema';
+import { createPostResponseSuccess, updatePostResponseSuccess } from '$lib/zodSchema';
 import { error } from '@sveltejs/kit';
 
 /**
@@ -10,7 +10,8 @@ async function addNewPost({
 	content,
 	words_count,
 	archive_name,
-}: Omit<TPost, 'id' | 'status'>) {
+	status,
+}: Omit<TPost, 'id'>) {
 	try {
 		const res = await fetcher('/api/post', 'POST', {
 			title,
@@ -33,7 +34,27 @@ async function updatePublicity({ id, status }: Pick<TPost, 'id' | 'status'>) {
 			status,
 		});
 	} catch (e) {
-		throw error(500, '포스트 공개/비공개 업데이트 실패');
+		throw error(500, '포스트 공개/비공개 업데이트 에러');
+	}
+}
+
+async function updatePost(
+	{ id, title, content, words_count, archive_name }: Partial<TPost>,
+	index: number,
+) {
+	try {
+		const result = await fetcher('/api/post', 'PATCH', {
+			id,
+			title,
+			content,
+			words_count,
+			archive_name,
+		});
+		const { data: updatedPost } = updatePostResponseSuccess.parse(result);
+
+		return updatedPost;
+	} catch (e) {
+		throw error(500, '포스트 업데이트 에러');
 	}
 }
 
@@ -64,6 +85,7 @@ async function deleteArchive(id: string) {
 export const db = {
 	addNewPost,
 	updatePublicity,
+	updatePost,
 	addArchive,
 	updateArchive,
 	deleteArchive,
