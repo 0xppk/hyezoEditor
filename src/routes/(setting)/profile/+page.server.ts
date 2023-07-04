@@ -1,5 +1,5 @@
 import { loginSchema } from '$lib/zodSchema.js';
-import { fail, type Actions } from '@sveltejs/kit';
+import { fail, type Actions, redirect } from '@sveltejs/kit';
 import { z } from 'zod';
 
 export const actions = {
@@ -24,6 +24,7 @@ export const actions = {
 
 	logout: async ({ locals: { supabase } }) => {
 		await supabase.auth.signOut();
+		throw redirect(303, '/');
 	},
 
 	register: async ({ request, url, locals: { supabase } }) => {

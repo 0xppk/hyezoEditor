@@ -3,7 +3,7 @@
 	import { getArchive } from '$lib/context/archive';
 	import { countWords, fetcher } from '$lib/utils';
 	import { createPostResponseSuccess } from '$lib/zodSchema';
-	import { fail } from '@sveltejs/kit';
+	import { error } from '@sveltejs/kit';
 
 	export let content: string;
 	export let youtubeFormatter: (value: string) => void;
@@ -28,7 +28,7 @@
 
 			return result;
 		} catch (e) {
-			return fail(500, { message: '포스트 만들기 실패', success: false });
+			throw error(500, '포스트 만들기 실패');
 		}
 	}
 
@@ -38,8 +38,8 @@
 				id,
 				status,
 			});
-		} catch (error) {
-			return fail(500, { message: '포스트 공개/비공개 업데이트 실패', success: false });
+		} catch (e) {
+			throw error(500, '포스트 공개/비공개 업데이트 실패');
 		}
 	}
 
@@ -93,19 +93,23 @@
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 			<ul tabindex="0" class="dropdown-content menu rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
 				<li class="pointer-events-none"><span>Archives</span></li>
-				<hr />
-				{#each $archives as { id, name }, i (id)}
-					<li
-						on:pointerdown={() => {
-							archive_name = name;
-							archives.updateName(name, i);
-							if (document.activeElement instanceof HTMLElement) {
-								document.activeElement.blur();
-							}
-						}}>
-						<span>{name}</span>
-					</li>
-				{/each}
+				<!-- 아카이브 리스트 시작 -->
+				{#if $archives.length}
+					<hr />
+					{#each $archives as { id, name }, i (id)}
+						<li
+							on:pointerdown={() => {
+								archive_name = name;
+								archives.updateName(name, i);
+								if (document.activeElement instanceof HTMLElement) {
+									document.activeElement.blur();
+								}
+							}}>
+							<span>{name}</span>
+						</li>
+					{/each}
+				{/if}
+				<!-- 아카이브 리스트 끝 -->
 			</ul>
 		</span>
 

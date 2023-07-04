@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { countWords } from '$lib/utils';
 	import { updatePostResponseSuccess } from '$lib/zodSchema';
-	import { fail } from '@sveltejs/kit';
+	import { error } from '@sveltejs/kit';
 	import { afterUpdate } from 'svelte';
 
 	export let post: TPost;
@@ -45,8 +45,8 @@
 
 			originalContents[index].content = updatedPost.content;
 			isEdited[index] = false;
-		} catch (error) {
-			return fail(500, { message: '서버 에러', success: false });
+		} catch (e) {
+			throw error(500, '포스트 업데이트 에러');
 		}
 	}
 
@@ -60,8 +60,8 @@
 					status,
 				}),
 			});
-		} catch (error) {
-			return fail(500, { message: '서버 에러', success: false });
+		} catch (e) {
+			throw error(500, '포스트 공개/비공개 업데이트 에러');
 		}
 	}
 

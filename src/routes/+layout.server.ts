@@ -1,21 +1,21 @@
-import type { ServerLoad } from '@sveltejs/kit';
+import { error, type ServerLoad } from '@sveltejs/kit';
 
 export const load = (async ({ cookies, locals: { supabase, getSession } }) => {
+	const theme = cookies.get('siteTheme');
 	const session = await getSession();
-	const { data, error } = await supabase
+	if (!session) return { theme };
+
+	const { data, error: isError } = await supabase
 		.from('profiles')
 		.select('username')
-		.eq('id', session?.user.id);
+		.eq('id', session.user.id);
 
-	/**
-	 * 에러나는 경우: 세션 데이터가 없을 경우다.
-	 * 로그인을 필수로 요하지 않기 때문에 별도의 에러 처리 x,
-	 * 데이터 유무에 따라 다른 UI를 렌더링할 것.
-	 */
-	const username = data ? String(data[0].username) : '손님';
+	if (isError) throw error(500, '유저 정보를 찾을 수 없습니다');
+
+	const username = String(data[0].username);
 
 	return {
-		theme: cookies.get('siteTheme'),
+		theme,
 		session,
 		username,
 	};
