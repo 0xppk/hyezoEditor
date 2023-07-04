@@ -2,7 +2,7 @@ import { archiveSchema, archivesSchema } from '$lib/zodSchema.js';
 import { error, fail, json, type RequestHandler } from '@sveltejs/kit';
 
 /**
- * 가져오기
+ * 부르기
  * (private)/+layout.server.ts에서 Load로 사용중
  */
 export const GET = (async ({ locals: { supabase, getSession } }) => {
@@ -23,7 +23,7 @@ export const GET = (async ({ locals: { supabase, getSession } }) => {
 }) satisfies RequestHandler;
 
 /**
- * 생성
+ * 만들기
  */
 export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 	const session = await getSession();
@@ -42,7 +42,7 @@ export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 }) satisfies RequestHandler;
 
 /**
- * 수정
+ * 고치기
  */
 export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
 	const { id, name } = archiveSchema.partial().parse(await request.json());
@@ -65,7 +65,7 @@ export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
 }) satisfies RequestHandler;
 
 /**
- * 삭제
+ * 없애기
  */
 export const DELETE = (async ({ request, locals: { supabase, getSession } }) => {
 	const { id } = archiveSchema.partial().parse(await request.json());

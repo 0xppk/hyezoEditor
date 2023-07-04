@@ -157,13 +157,13 @@ export default {
 			});
 
 			addComponents({
-				'.stack': {
+				'.stacked': {
 					display: 'grid',
 					isolation: 'isolate',
 					'place-items': 'center',
 				},
 
-				'.stack > *': {
+				'.stacked > *': {
 					'grid-column': '1 / 2',
 					'grid-row': '1 / 2',
 				},

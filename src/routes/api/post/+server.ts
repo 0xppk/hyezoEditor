@@ -2,7 +2,7 @@ import { idParser, numberIdParser, postSchema, postsSchema } from '$lib/zodSchem
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 
 /**
- * 가져오기
+ * 부르기
  * 
  */
 export const GET = (async ({ locals: { supabase, getSession } }) => {
@@ -22,7 +22,7 @@ export const GET = (async ({ locals: { supabase, getSession } }) => {
 }) satisfies RequestHandler;
 
 /**
- * 추가
+ * 만들기
  */
 export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 	const session = await getSession();
@@ -67,7 +67,7 @@ export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 }) satisfies RequestHandler;
 
 /**
- * 업데이트
+ * 고치기
  */
 export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
 	const {
