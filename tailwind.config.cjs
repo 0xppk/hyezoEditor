@@ -30,10 +30,11 @@ export default {
 			width: {
 				scrollbarWidth: 'var(--scrollbarWidth)',
 				layoutWidth: 'calc(100vw - var(--scrollbarWidth))',
-				sidebar: 'var(--sidebar)'
+				sidebar: 'var(--sidebar)',
 			},
 			height: {
 				nav: 'var(--navHeight)',
+				layoutHeight: 'calc(100vh - var(--navHeight))',
 			},
 			padding: {
 				nav: 'var(--navHeight)',

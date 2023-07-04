@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { NavBar } from '@components';
 	import '../app.css';
+	// import { twemoji } from 'twemoji-svelte-action';
+	// const options = {
+	// 	folder: 'svg',
+	// 	ext: '.svg',
+	// };
 </script>
 
 <div class="min-h-screen w-layoutWidth text-base text-content">

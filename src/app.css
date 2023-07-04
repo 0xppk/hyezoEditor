@@ -90,6 +90,16 @@
 	}
 }
 
+@layer components {
+	[class~='emoji'] {
+		@apply inline-flex h-5 w-5;
+	}
+
+	h4 [class~='emoji'] {
+		@apply inline-flex h-9 w-9;
+	}
+}
+
 @font-face {
 	font-family: 'Pretendard';
 	src: url('/fonts/Pretendard-Regular.woff2') format('woff2');
