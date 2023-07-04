@@ -13,7 +13,7 @@ const initialArchive = [
 	// 	word_goal: null,
 	// 	group_id: null,
 	// },
-] satisfies TArchive[] | undefined;
+] satisfies TArchive[] | [];
 
 function createArchiveStore() {
 	const { subscribe, set, update } = writable<TArchive[]>(initialArchive);
