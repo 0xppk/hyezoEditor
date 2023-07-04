@@ -2,12 +2,10 @@
 	import { enhance } from '$app/forms';
 
 	export let data;
-
-	let { session, username } = data;
 	$: ({ session, username } = data);
 </script>
 
-<h1>{username ?? '손님'}</h1>
+<h1>{username}</h1>
 
 <label for="register" class="flex justify-center text-xl font-bold">회원가입</label>
 <form id="register" method="POST" use:enhance action="?/register" class="form-control gap-1 p-5">

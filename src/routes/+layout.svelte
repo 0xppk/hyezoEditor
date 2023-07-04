@@ -1,11 +1,22 @@
 <script lang="ts">
 	import { NavBar } from '@components';
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
 	import '../app.css';
-	// import { twemoji } from 'twemoji-svelte-action';
-	// const options = {
-	// 	folder: 'svg',
-	// 	ext: '.svg',
-	// };
+
+	export let data;
+	let { supabase, session } = data;
+	$: ({ supabase, session } = data);
+
+	onMount(() => {
+		const { data } = supabase.auth.onAuthStateChange((event, _session) => {
+			if (_session?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth');
+			}
+		});
+
+		return () => data.subscription.unsubscribe();
+	});
 </script>
 
 <div class="min-h-screen w-layoutWidth text-base text-content">

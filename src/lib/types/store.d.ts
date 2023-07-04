@@ -1,4 +1,4 @@
-import type { TArchiveStore } from '$lib/stores/archive';
+import type { TArchiveStore } from '$lib/store/archive';
 
 declare global {
 	namespace Store {

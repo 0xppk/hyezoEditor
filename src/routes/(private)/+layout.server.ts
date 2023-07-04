@@ -1,21 +1,16 @@
 import { archivesSchema } from '$lib/zodSchema';
-import { error, type ServerLoad } from '@sveltejs/kit';
+import type { ServerLoad } from '@sveltejs/kit';
 
-export const load = (async ({ request, locals: { supabase, getSession } }) => {
+export const load = (async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
-	if (!session) return;
 
 	const { data, error: isError } = await supabase
 		.from('archives')
 		.select('*')
-		.eq('author_id', session.user.id)
+		.eq('author_id', session?.user.id)
 		.order('created_at', { ascending: true });
 
-	if (isError) throw error(500, '등록된 아카이브가 없습니다. 😢');
+	const archiveData = data ? archivesSchema.parse(data) : [];
 
-	const archiveData = archivesSchema.parse(data);
-
-	return {
-		archiveData,
-	};
+	return { archiveData };
 }) satisfies ServerLoad;

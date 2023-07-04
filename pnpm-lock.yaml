@@ -85,9 +85,6 @@ devDependencies:
   svelte-check:
     specifier: ^3.4.4
     version: 3.4.4(postcss@8.4.24)(svelte@4.0.3)
-  svelte-feather-icons:
-    specifier: ^4.0.1
-    version: 4.0.1
   svelte-hero-icons:
     specifier: ^5.0.0
     version: 5.0.0
@@ -3009,12 +3006,6 @@ packages:
       svelte: 4.0.3
     dev: true
 
-  /svelte-feather-icons@4.0.1:
-    resolution: {integrity: sha512-DMDrlbblaRUHLcTFtKHE4GWQ/Fk/kneGIZrrI75EmTxCu1hgHe8uq8e80ONrmdjL/i3f1d8fkcx73SWng2X6Gg==}
-    dependencies:
-      svelte: 3.59.2
-    dev: true
-
   /svelte-hero-icons@5.0.0:
     resolution: {integrity: sha512-xKMI/Z0f/6831I0R1YKJjVbAw9VBD6XKysvng6LtomlS4n3ZD1lZNAfLrrCmnc1pmiLr/8sVeQA8kgHLQwYlRg==}
     engines: {node: '>=14.0.0'}
@@ -3081,6 +3072,7 @@ packages:
   /svelte@3.59.2:
     resolution: {integrity: sha512-vzSyuGr3eEoAtT/A6bmajosJZIUWySzY2CzB3w2pgPvnkUjGqlDnsNnA0PMO+mMAhuyMul6C2uuZzY6ELSkzyA==}
     engines: {node: '>= 8'}
+    dev: false
 
   /svelte@4.0.3:
     resolution: {integrity: sha512-SSJZBR+Uca3Xa/R18/7IkkifDdz2Jfuq2eXMUphDhabDxQL6qR8QAUoEmrtYWhzeV0civoFw4Dcvo2yscysdeg==}

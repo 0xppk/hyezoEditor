@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { converterLtGt } from '$lib/utils.js';
 	import { Viewer } from '@components';
+
 	export let data;
 	let { session, posts } = data;
+	$: ({ session, posts } = data);
 
 	const originalContents: { title: string; content: string }[] | undefined = posts.map(post => {
 		return { title: post.title, content: post.content };
@@ -12,8 +14,6 @@
 		const convertedValue = converterLtGt(val) ?? '';
 		posts[i].content = convertedValue;
 	};
-
-	$: ({ session } = data);
 </script>
 
 {#if posts.length}
