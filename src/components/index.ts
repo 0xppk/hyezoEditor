@@ -5,3 +5,4 @@ export { default as Editor } from './Editor.svelte';
 export { default as Viewer } from './Viewer.svelte';
 export { default as NavLink } from './NavLink.svelte';
 export { default as Modal } from './Modal.svelte';
+export { default as RotateText } from './RotateText.svelte';

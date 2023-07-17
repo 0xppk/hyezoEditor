@@ -1,9 +1,15 @@
-import { idParser, numberIdParser, postSchema, postsSchema } from '$lib/zodSchema.js';
+import {
+	archiveIdSchema,
+	archiveSchema,
+	postIdSchema,
+	postSchema,
+	postsSchema,
+} from '$lib/zodSchema.js';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 
 /**
  * 부르기
- * 
+ *
  */
 export const GET = (async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
@@ -28,21 +34,9 @@ export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session) throw error(500, '다시 로그인해 주세요');
 
-	const { title, content, words_count, archive_name } = postSchema
+	const { title, content, words_count, archive_id } = postSchema
 		.omit({ id: true, status: true })
 		.parse(await request.json());
-
-	// todo 아카이브 업데이트
-	// 기존 아카이브에 추가할 수도 있다
-	// 기존 아카이브 찾을 수 없으면 아카이브 생성으로
-
-	// todo 아카이브 생성
-	const { data, error: createArchiveError } = await supabase
-		.from('archives')
-		.insert({ author_id: session.user.id, name: archive_name })
-		.select('id');
-
-	const archive_id = idParser(data)[0].id;
 
 	const { data: postData, error: createPostError } = await supabase
 		.from('posts')
@@ -55,13 +49,9 @@ export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 		})
 		.select('id');
 
-	if (createArchiveError) {
-		throw error(500, '아카이브 생성 실패');
-	} else if (createPostError) {
-		throw error(500, '포스트 생성 실패');
-	}
+	if (createPostError) throw error(500, '포스트 생성 실패');
 
-	const postId = numberIdParser(postData)[0].id;
+	const postId = postIdSchema.parse(postData);
 
 	return json({ data: { id: postId }, success: true }, { status: 201 });
 }) satisfies RequestHandler;
@@ -76,7 +66,7 @@ export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
 		content,
 		words_count,
 		status: isPublicityUpdate,
-	} = postSchema.partial().parse(await request.json());
+	} = postSchema.omit({ archive_id: true }).parse(await request.json());
 
 	const session = await getSession();
 	if (!session) throw error(500, '다시 로그인해 주세요');
@@ -95,17 +85,7 @@ export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
 
 	if (updatePostError) throw error(500, '포스트 업데이트 에러');
 
-	const refinedPost = {
-		...data[0],
-		archive_name: data[0].archives.name,
-	};
-
-	const updatedPost = (() => {
-		delete refinedPost.archive_id;
-		delete refinedPost.archives;
-
-		return postSchema.parse(refinedPost);
-	})();
+	const updatedPost = postSchema.parse(data[0]);
 
 	return json({ data: updatedPost, success: true }, { status: 201 });
 }) satisfies RequestHandler;

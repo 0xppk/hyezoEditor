@@ -1,47 +1,24 @@
 <script lang="ts">
-	import {
-		ArchiveBox,
-		ChevronLeft,
-		ChevronRight,
-		Icon,
-		Pause,
-		PlusSmall,
-		UserCircle,
-		Cog6Tooth,
-		type IconSource,
-	} from 'svelte-hero-icons';
+	import Icon from '@iconify/svelte';
 
-	export let icon: TIconSetup;
-	export let size: string = '36';
-	export let className: string = '';
-	export let href: string | undefined = undefined;
-	export let type: 'solid' | 'outline' | 'mini' = 'outline';
+	export let src: keyof typeof list;
+	export let style: string = '';
 
-	const config = {
-		chevronLeft: ChevronLeft,
-		chevronRight: ChevronRight,
-		pause: Pause,
-		user: UserCircle,
-		plus: PlusSmall,
-		archiveBox: ArchiveBox,
-		setting: Cog6Tooth,
-	} satisfies Record<TIconSetup, IconSource>;
+	const list = {
+		mango: 'twemoji:mango',
+		eyes: 'twemoji:eyes',
+		egg: 'tabler:egg-cracked',
+		zap: 'prime:bolt',
+		apple: 'ep:cherry',
+		candle: 'noto-v1:candle',
+		vol: 'ph:heart-break-duotone',
+		bomb: 'noto:bomb',
+		loader: 'eva:loader-outline',
+		bracket: 'ph:brackets-round-bold',
+		silence: 'clarity:moon-line',
+		light: 'line-md:moon-alt-to-sunny-outline-loop-transition',
+		dark: 'line-md:moon-rising-alt-loop',
+	};
 </script>
 
-{#if href}
-	<a class="btn-ghost btn" {href} aria-label={`${href}로 페이지 이동`} on:click>
-		<svelte:component this={Icon} {size} src={config[icon]} class={className} />
-	</a>
-{:else}
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<span role="button" tabindex="0" on:click>
-		<svelte:component
-			this={Icon}
-			solid={type === 'solid'}
-			outline={type === 'outline'}
-			mini={type === 'mini'}
-			{size}
-			src={config[icon]}
-			class={className} />
-	</span>
-{/if}
+<svelte:component this={Icon} icon={list[src]} class="icon" {style} />

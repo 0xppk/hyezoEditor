@@ -19,9 +19,7 @@
 	});
 </script>
 
-<div class="min-h-screen w-layoutWidth overflow-x-hidden text-base text-content">
-	<NavBar />
-	<main class="mx-auto flex max-w-4xl flex-col items-center px-12 sm:px-44">
-		<slot />
-	</main>
-</div>
+<!-- <NavBar /> -->
+<main>
+	<slot />
+</main>

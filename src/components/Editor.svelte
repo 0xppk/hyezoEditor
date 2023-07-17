@@ -4,12 +4,12 @@
 	import { db } from '$lib/db/client';
 	import { countWords } from '$lib/utils';
 	import { afterUpdate } from 'svelte';
-	import Modal from './Modal.svelte';
+	import Dropdown from './Dropdown.svelte';
 
 	export let content: string;
 	export let youtubeFormatter: (value: string) => void;
 	let title: string;
-	let selectedAchive: string = '';
+	let selectedAchive: { id: string; name: string } = { id: '', name: '' };
 	$: words_count = countWords(content);
 
 	let contentDiv: HTMLElement;
@@ -27,6 +27,13 @@
 	afterUpdate(() => scrollToBottom(wrapperDiv));
 
 	// 이벤트 핸들러
+	function selectArchive(data: { id: string; name: string }) {
+		selectedAchive = { ...data };
+		if (document.activeElement instanceof HTMLElement) {
+			document.activeElement.blur();
+		}
+	}
+
 	function onKeyPress(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
 			e.preventDefault();
@@ -34,19 +41,12 @@
 		}
 	}
 
-	function selectArchive(name: string) {
-		selectedAchive = name;
-		if (document.activeElement instanceof HTMLElement) {
-			document.activeElement.blur();
-		}
-	}
-
 	async function createNewPost(status?: TPostStatus) {
-		await db.addNewPost({
+		await db.createNewPost({
 			title,
 			content,
 			words_count,
-			archive_name: selectedAchive,
+			archive_id: selectedAchive.id,
 			status,
 		});
 		goto('/archive');
@@ -81,40 +81,29 @@
 
 	<!-- 바텀 바 -->
 	<section class="flex max-h-40 items-center justify-between gap-3 border-t border-primary/50 p-2">
-		<!-- 아카이브 목록 드랍다운 메뉴 -->
-		<div class="dropdown-top dropdown">
-			<button class="btn-ghost btn">🗂️ {selectedAchive}</button>
-			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-			<ul tabindex="0" class="dropdown-content menu rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
-				<div class="flex items-center justify-between">
-					<li class="pointer-events-none">
-						<span>Archives</span>
-					</li>
-					<button
-						class="btn-ghost btn-sm btn-circle text-black/90"
-						on:pointerdown={() => modalDiv.showModal()}
-					>
-						➕
-					</button>
-				</div>
+		<div class="flex items-center">
+			<Dropdown {modalDiv} selectedAchive={selectedAchive.name}>
 				{#if $archives.length}
-					<hr />
-					{#each $archives as { id, name }, i (id)}
-						<li on:pointerdown={() => selectArchive(name)}>
-							<span>{name}</span>
-						</li>
-					{/each}
+					<div class="max-h-60 w-full overflow-x-hidden overflow-y-scroll">
+						<hr />
+						{#each $archives as { id, name }, i (id)}
+							<li>
+								<button on:click={() => selectArchive({ id, name })}>
+									<span class="inline-block w-full truncate">{name}</span>
+								</button>
+							</li>
+						{/each}
+					</div>
 				{/if}
-				<!-- Open the modal using ID.showModal() method -->
-
-				<!-- 아카이브 리스트 끝 -->
-			</ul>
+			</Dropdown>
+			<span class="line-clamp-1 px-2">{selectedAchive.name}</span>
 		</div>
+
 		<div class="flex items-center gap-3">
 			<span class="text-right text-primary">{countWords(content)}</span>
 			<button
 				class="btn-primary btn-outline btn-sm btn w-14"
-				on:pointerdown={e => {
+				on:click={e => {
 					e.preventDefault();
 					typingMode = !typingMode;
 					contentDiv.focus();
@@ -124,18 +113,33 @@
 			</button>
 			<button
 				class="btn-primary btn-outline btn-sm btn w-14"
-				on:pointerdown={() => createNewPost('public')}
+				on:click={() => createNewPost('public')}
 			>
 				발행
 			</button>
-			<button
-				on:pointerdown={() => createNewPost()}
-				class="btn-primary btn-outline btn-sm btn w-14"
-			>
+			<button on:click={() => createNewPost()} class="btn-primary btn-outline btn-sm btn w-14">
 				저장
 			</button>
 		</div>
 	</section>
 </article>
 
-<svelte:component this={Modal} {modalDiv} />
+<dialog bind:this={modalDiv} class="modal modal-bottom mx-auto w-72 sm:modal-middle">
+	<form method="dialog" class="modal-box grid place-items-center gap-5">
+		<input type="text" bind:value={selectedAchive.name} class="input w-full outline-none" />
+		<button
+			class="btn-ghost btn-sm btn w-full"
+			disabled={!selectedAchive}
+			on:click={async () => {
+				const newArchive = await db.createArchive(selectedAchive.name);
+				archives.insert(newArchive);
+				selectedAchive = { id: '', name: '' };
+			}}
+		>
+			만들기
+		</button>
+	</form>
+	<form method="dialog" class="modal-backdrop fixed inset-0">
+		<button>close</button>
+	</form>
+</dialog>

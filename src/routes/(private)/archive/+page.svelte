@@ -16,18 +16,34 @@
 	};
 </script>
 
-{#if posts.length}
-	{#each posts as post, index (post.id)}
-		<svelte:component
-			this={Viewer}
-			{post}
-			{index}
-			{originalContents}
-			{isEdited}
-			{youtubeFormatter} />
-	{/each}
-{:else}
-	<div class="flex flex-col">
-		<h2 class="font-extrabold text-secondary">No posts yet.</h2>
-	</div>
-{/if}
+<div class="wrapper">
+	{#if posts.length}
+		{#each posts as post, index (post.id)}
+			<svelte:component
+				this={Viewer}
+				{post}
+				{index}
+				{originalContents}
+				{isEdited}
+				{youtubeFormatter}
+			/>
+		{/each}
+	{:else}
+		<div class="not-found">
+			<h2>No posts yet.</h2>
+		</div>
+	{/if}
+</div>
+
+<style>
+	.wrapper {
+		width: 100%;
+		padding-top: 1.2rem;
+	}
+
+	.not-found {
+		display: flex;
+		flex-direction: column;
+	}
+
+</style>

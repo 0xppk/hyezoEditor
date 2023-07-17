@@ -30,15 +30,17 @@ export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 	if (!session) throw error(500, { message: '다시 로그인해 주세요' });
 
 	const { name } = archiveSchema.pick({ name: true }).parse(await request.json());
-
+	console.log(name);
 	const { data, error: createArchiveError } = await supabase
 		.from('archives')
 		.insert({ author_id: session.user.id, name })
-		.select('id');
+		.select('*');
 
 	if (createArchiveError) throw error(500, { message: '아카이브 생성 실패' });
 
-	return json({ success: true, message: '아카이브 생성 성공' });
+	const newArchive = archiveSchema.parse(data[0]);
+	console.log(newArchive);
+	return json({ data: newArchive, success: true }, { status: 201 });
 }) satisfies RequestHandler;
 
 /**
@@ -68,14 +70,13 @@ export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
  * 없애기
  */
 export const DELETE = (async ({ request, locals: { supabase, getSession } }) => {
-	const { id } = archiveSchema.partial().parse(await request.json());
-
 	const session = await getSession();
-	if (!session) throw error(500, { message: '다시 로그인해 주세요' });
+	if (!session) throw error(500, '다시 로그인해 주세요');
+
+	const { id } = archiveSchema.pick({ id: true }).parse(await request.json());
 
 	const { error: isError } = await supabase.from('archives').delete().eq('id', id);
-
-	if (isError) throw error(500, { message: 'Server error. Try again later.' });
+	if (isError) throw error(500, 'Server error. Try again later.');
 
 	return json({ message: '아카이브가 삭제되었습니다', success: true }, { status: 201 });
 }) satisfies RequestHandler;

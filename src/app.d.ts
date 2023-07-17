@@ -10,7 +10,7 @@ declare global {
 		}
 		interface PageData {
 			session: Session | null;
-			theme?: string;
+			theme?: 'light' | 'dark';
 			username: string | null;
 		}
 		// interface User {}

@@ -1,20 +1,23 @@
 import { writable } from 'svelte/store';
 
-const initialArchive = [] satisfies TArchive[] | [];
+const initialState: [] = [];
 
 function createArchiveStore() {
-	const { subscribe, set, update } = writable<TArchive[]>(initialArchive);
+	const { subscribe, set, update } = writable<TArchive[]>(initialState);
 
 	return {
 		subscribe,
-		syncWith: (newArray: TArchive[]) => update(arr => newArray),
+		syncWith: (newArray: TArchive[]) => update(_state => newArray),
+		insert: (newArchive: TArchive) => update(state => [...state, newArchive]),
 		updateName: (newName: string, index: number) =>
-			update(arr => {
-				arr[index].name = newName;
-				return arr;
+			update(state => {
+				// const copy = structuredClone(state);
+				state[index].name = newName;
+				return state;
 			}),
-		reset: () => set(initialArchive),
+		reset: () => set(initialState),
 	};
 }
+
 export const archive = createArchiveStore();
 export type TArchiveStore = ReturnType<typeof createArchiveStore>;

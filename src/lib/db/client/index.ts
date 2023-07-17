@@ -1,23 +1,28 @@
 import { fetcher } from '$lib/utils';
-import { createPostResponseSuccess, updatePostResponseSuccess } from '$lib/zodSchema';
+import {
+	archiveResponseSuccess,
+	createPostResponseSuccess,
+	updatePostResponseSuccess,
+} from '$lib/zodSchema';
 import { error } from '@sveltejs/kit';
 
 /**
  * post 메써드
  */
-async function addNewPost({
+async function createNewPost({
 	title,
 	content,
 	words_count,
-	archive_name,
-	status,
+	status = 'private',
+	archive_id,
 }: Omit<TPost, 'id'>) {
 	try {
 		const res = await fetcher('/api/post', 'POST', {
 			title,
 			content,
 			words_count,
-			archive_name,
+			archive_id,
+			status,
 		});
 		const result = createPostResponseSuccess.parse(res);
 
@@ -38,17 +43,14 @@ async function updatePublicity({ id, status }: Pick<TPost, 'id' | 'status'>) {
 	}
 }
 
-async function updatePost(
-	{ id, title, content, words_count, archive_name }: Partial<TPost>,
-	index: number,
-) {
+async function updatePost({ id, title, content, words_count, archive_id }: Partial<TPost>) {
 	try {
 		const result = await fetcher('/api/post', 'PATCH', {
 			id,
 			title,
 			content,
 			words_count,
-			archive_name,
+			archive_id,
 		});
 		const { data: updatedPost } = updatePostResponseSuccess.parse(result);
 
@@ -61,11 +63,13 @@ async function updatePost(
 /**
  * archive 메써드
  */
-async function addArchive(archive_name: string, index: number) {
-	await fetcher<TArchive>('/api/archive', 'POST', {
+async function createArchive(archive_name: string) {
+	const res = await fetcher<TArchive>('/api/archive', 'POST', {
 		name: archive_name,
 	});
-	// todo: 추가 후 스토어에도 반영 archives.updateName(archive_name, index);
+	const { data: newArchive } = archiveResponseSuccess.parse(res);
+
+	return newArchive;
 }
 
 async function updateArchive({ id, name }: { id: string; name: string }, index: number) {
@@ -83,10 +87,10 @@ async function deleteArchive(id: string) {
 }
 
 export const db = {
-	addNewPost,
+	createNewPost,
 	updatePublicity,
 	updatePost,
-	addArchive,
+	createArchive,
 	updateArchive,
 	deleteArchive,
 };

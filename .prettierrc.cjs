@@ -8,6 +8,6 @@ module.exports = {
 	arrowParens: 'avoid',
 	bracketSameLine: false,
 	pluginSearchDirs: ['.'],
-	plugins: [import('prettier-plugin-svelte'), import('prettier-plugin-tailwindcss')],
+	plugins: [import('prettier-plugin-svelte')],
 	overrides: [{ files: '*.svelte', options: { parser: 'svelte' } }],
 };

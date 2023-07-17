@@ -15,13 +15,16 @@ export const loginSchema = z.object({
 
 export const postSchema = z.object({
 	id: z.number(),
-	archive_name: z.string().min(1),
+	archive_id: z.string().uuid(),
 	title: z.string().min(1),
 	content: z.string().min(1),
 	words_count: z.number(),
 	status: statusSchema,
+	archive_name: z.string().optional(),
 });
 export const postsSchema = z.array(postSchema);
+export const postIdSchema = z.array(postSchema.pick({ id: true })).transform(arr => arr[0].id);
+
 export const createPostResponseSuccess = z.object({
 	data: postSchema.pick({ id: true }),
 	success: z.boolean(),
@@ -44,28 +47,15 @@ export const archiveSchema = z.object({
 	word_goal: z.number().nullable(),
 });
 export const archivesSchema = z.array(archiveSchema);
+export const archiveIdSchema = z
+	.array(archiveSchema.pick({ id: true }))
+	.transform(arr => arr[0].id);
 export const archiveResponseSuccess = z.object({
-	message: z.string(),
+	data: archiveSchema,
 	success: z.boolean(),
 });
+
 export const groupSchema = z.object({
+	id: z.string().uuid(),
 	groupname: z.string().min(1),
 });
-
-export const idParser = (data: any) =>
-	z
-		.array(
-			z.object({
-				id: z.string(),
-			}),
-		)
-		.parse(data);
-
-export const numberIdParser = (data: any) =>
-	z
-		.array(
-			z.object({
-				id: z.number(),
-			}),
-		)
-		.parse(data);

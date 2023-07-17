@@ -9,6 +9,22 @@
 	setArchive(archiveData);
 </script>
 
-<div class="flex h-layoutHeight w-full items-center py-10 sm:block sm:items-start sm:py-60">
+<div class="container">
 	<slot />
 </div>
+
+<style>
+	.container {
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 0 1.5rem;
+	}
+
+	@media (--tablet) {
+		.container {
+			padding: 0 2.5rem
+		}
+	}
+</style>
