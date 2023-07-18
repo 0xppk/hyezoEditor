@@ -22,12 +22,11 @@
 		padding: 1.2rem 0;
 	}
 
-	@media (--tablet){
+	@media (--tablet) {
 		.container {
 			display: block;
 			align-items: start;
 			padding: 15rem;
 		}
 	}
-
-	</style>
+</style>

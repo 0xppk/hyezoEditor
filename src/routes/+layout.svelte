@@ -19,7 +19,7 @@
 	});
 </script>
 
-<!-- <NavBar /> -->
+<NavBar />
 <main>
 	<slot />
 </main>

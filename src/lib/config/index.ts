@@ -1,8 +1,8 @@
 export const piled_menu_showList = [
-	{ title: 'world', description: 2023, category: 'svelte', src: 'cover.webp' },
-	{ title: 'scenario', description: 2022, category: 'nextjs 13', src: 'image.jpg' },
-	{ title: 'portfolio', description: 2021, category: 'nextjs 12', src: 'cover.webp' },
-	{ title: 'crayon', description: 2020, category: 'three', src: 'image.png' },
+	{ title: 'world', description: '2023', category: 'svelte', src: 'cover.webp' },
+	{ title: 'scenario', description: '2022', category: 'nextjs 13', src: 'image.jpg' },
+	{ title: 'portfolio', description: '2021', category: 'nextjs 12', src: 'cover.webp' },
+	{ title: 'crayon', description: '2020', category: 'three', src: 'image.png' },
 ];
 
 export const images = [
@@ -13,7 +13,7 @@ export const images = [
 ];
 
 export const navConfig = [
-	{ href: '/post', name: 'Post', icon: 'addPost' },
-	{ href: '/archive', name: 'Archive', icon: 'archive' },
-	{ href: '/group', name: 'Commune', icon: 'group' },
+	{ href: '/post', name: 'Post' },
+	{ href: '/archive', name: 'Archive' },
+	{ href: '/group', name: 'Commune' },
 ];
