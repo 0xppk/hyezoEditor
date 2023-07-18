@@ -25,9 +25,6 @@ devDependencies:
   '@csstools/postcss-global-data':
     specifier: ^2.0.0
     version: 2.0.0(postcss@8.4.24)
-  '@iconify/svelte':
-    specifier: ^3.1.4
-    version: 3.1.4(svelte@4.0.3)
   '@playwright/test':
     specifier: ^1.35.1
     version: 1.35.1
@@ -67,6 +64,9 @@ devDependencies:
   eslint-plugin-svelte:
     specifier: ^2.32.2
     version: 2.32.2(eslint@8.44.0)(svelte@4.0.3)
+  iconify-icon:
+    specifier: ^1.0.8
+    version: 1.0.8
   postcss:
     specifier: ^8.4.24
     version: 8.4.24
@@ -731,15 +731,6 @@ packages:
 
   /@humanwhocodes/object-schema@1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
-    dev: true
-
-  /@iconify/svelte@3.1.4(svelte@4.0.3):
-    resolution: {integrity: sha512-YDwQlN46ka8KPRayDb7TivmkAPizfTXi6BSRNqa1IV0+byA907n8JcgQafA7FD//pW5XCuuAhVx6uRbKTo+CfA==}
-    peerDependencies:
-      svelte: '*'
-    dependencies:
-      '@iconify/types': 2.0.0
-      svelte: 4.0.3
     dev: true
 
   /@iconify/types@2.0.0:
@@ -2190,6 +2181,12 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+    dev: true
+
+  /iconify-icon@1.0.8:
+    resolution: {integrity: sha512-jvbUKHXf8EnGGArmhlP2IG8VqQLFFyTvTqb9LVL2TKTh7/eCCD1o2HHE9thpbJJb6B8hzhcFb6rOKhvo7reNKA==}
+    dependencies:
+      '@iconify/types': 2.0.0
     dev: true
 
   /ignore@5.2.4:

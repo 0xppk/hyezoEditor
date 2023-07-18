@@ -16,7 +16,7 @@
 <div class="container">
 	<div bind:this={sticky} class="sticky">
 		<div class="hero">
-			<svelte:component this={RotateText} />
+			<RotateText />
 		</div>
 		{#each showList as { title, src, category, description } (title)}
 			<section>

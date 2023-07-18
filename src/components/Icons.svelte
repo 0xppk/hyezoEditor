@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Icon from '@iconify/svelte';
+	import 'iconify-icon';
 
 	export let src: keyof typeof list;
 	export let style: string = '';
@@ -21,4 +21,4 @@
 	};
 </script>
 
-<svelte:component this={Icon} icon={list[src]} class="icon" {style} />
+<iconify-icon icon={list[src]} class="icon" {style} />
