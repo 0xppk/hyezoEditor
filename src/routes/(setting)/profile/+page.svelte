@@ -9,21 +9,21 @@
 
 <label for="register" class="flex justify-center text-xl font-bold">회원가입</label>
 <form id="register" method="POST" use:enhance action="?/register" class="form">
-	<input type="email" name="email"/>
+	<input type="email" name="email" />
 	<input type="password" name="password" class="rounded-lg bg-twitch p-2" />
 	<button type="submit">회원가입</button>
 </form>
 
 <label for="login" class="flex justify-center text-lg font-bold">로그인</label>
 <form id="login" method="POST" use:enhance action="?/login" class="form">
-	<input type="email" name="email"/>
+	<input type="email" name="email" />
 	<input type="password" name="password" class="rounded-lg bg-twitch p-2" />
 	<button type="submit" class="btn-primary btn">로그인</button>
 </form>
 
 <label for="update" class="flex justify-center text-lg font-bold">업데이트</label>
 <form id="update" method="POST" use:enhance action="?/update" class="form">
-	<input type="text" name="username"/>
+	<input type="text" name="username" />
 	<button type="submit">업데이트</button>
 </form>
 
@@ -36,11 +36,3 @@
 	<input type="file" name="avatar" class="file-input" />
 	<button type="submit">업로드</button>
 </form>
-
-
-<style>
-	.file-input {
-		/* display: none; */
-	}
-
-</style>
