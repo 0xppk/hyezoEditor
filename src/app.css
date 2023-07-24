@@ -1,142 +1,103 @@
-:root {
-	/* 컬러 */
-	--c-main: hsl(20, 100%, 70%);
-	--c-bkg: hsl(0, 0%, 93%);
-	--c-accent: hsl(198 93% 60%);
-	--c-mainText: hsl(217, 33%, 17%);
-	--c-border: black;
-	/* 높이 */
-	--h-nav: 3.5rem;
-	/* 넓이 */
-	--w-scrollbar: 1px;
-	--w-sidebar: 12rem;
-	/* 라운드 */
-	--br-xs: 0.125rem;
-	--br-sm: 0.25rem;
-	--br-base: 0.375rem;
-	--br-lg: 0.5rem;
-	--br-xl: 0.75rem;
-	--br-2xl: 1rem;
-	--br-3xl: 1.5rem;
-	--br-full: 9999px;
-	/* 폰트 */
-	--fs-xs: clamp(0.64rem, calc(0.67rem + -0.04vw), 0.66rem);
-	--fs-sm: clamp(0.76rem, calc(0.74rem + 0.07vw), 0.8rem);
-	--fs-base: clamp(0.88rem, calc(0.82rem + 0.22vw), 1rem);
-	--fs-lg: clamp(1.01rem, calc(0.91rem + 0.43vw), 1.25rem);
-	--fs-xl: clamp(1.16rem, calc(0.99rem + 0.72vw), 1.56rem);
-	--fs-2xl: clamp(1.33rem, calc(1.07rem + 1.1vw), 1.95rem);
-	--fs-3xl: clamp(1.53rem, calc(1.15rem + 1.61vw), 2.44rem);
-	--fs-4xl: clamp(1.76rem, calc(1.22rem + 2.28vw), 3.05rem);
-	--fs-5xl: clamp(2.02rem, calc(1.28rem + 3.17vw), 3.82rem);
-	--ff-sans: 'Pretendard', system-ui;
-	--ff-line: 'LINE', system-ui;
-	--ff-basis: 'Basis', system-ui;
-}
-/* 다크모드 */
-:root[data-theme='dark'] {
-	--c-main: hsl(20, 100%, 70%);
-	--c-bkg: hsl(218, 13%, 12%);
-	--c-accent: hsl(198 93% 60%);
-	--c-mainText: hsl(0 2% 95%);
-	--c-border: hsla(240, 4%, 87%, 0.257);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@media (prefers-reduced-motion) {
-	body,
-	html {
-		scroll-behavior: auto;
+@layer base {
+	:root {
+		/* Daisy UI 컬러 */
+		--p: 20deg 100% 70%;
+		--pf: 20deg 91% 60%;
+		--pc: 21deg 100% 94%;
+		--s: 239deg 95% 52%;
+		--a: 198deg 93% 60%;
+		--n: 214deg 20% 21%;
+		--in: 225deg 63% 33%;
+		--suc: 158deg 64% 52%;
+		--wa: 43deg 96% 56%;
+		--er: 0deg 91% 71%;
+		--b1: 0deg 0% 100%;
+		/* 컬러 */
+		--bkg: 49deg 35% 94%;
+		--content: 217deg 32.6% 17.5%;
+		/* 높이 */
+		--navHeight: 3.5rem;
+		/* 넓이 */
+		--scrollbarWidth: 1px;
+		--sidebar: 12rem;
+	}
+
+	:root[data-theme='dark'] {
+		--p: 49deg 35% 94%;
+		--pf: 20deg 91% 60%;
+		--pc: 21deg 100% 94%;
+		--s: 239deg 95% 52%;
+		--a: 220deg 26% 14%;
+		--n: 220deg 26% 14%;
+		--in: 220deg 26% 14%;
+		--suc: 220deg 26% 14%;
+		--wa: 220deg 26% 14%;
+		--er: 220deg 26% 14%;
+		--b1: 220deg 26% 14%;
+
+		--bkg: 218deg 13% 12%;
+		--content: 0deg 2% 95%;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--p: 20deg 100% 70%;
+			--pf: 20deg 91% 60%;
+			--pc: 21deg 100% 94%;
+			--s: 225deg 63% 33%;
+			--a: 198deg 93% 60%;
+			--n: 214deg 20% 21%;
+			--in: 225deg 63% 33%;
+			--suc: 158deg 64% 52%;
+			--wa: 43deg 96% 56%;
+			--er: 0deg 91% 71%;
+			--b1: 0deg 0% 100%;
+
+			--bkg: 49deg 35% 94%;
+			--content: 217deg 32.6% 17.5%;
+		}
+	}
+
+	@media (prefers-reduced-motion) {
+		body,
+		html {
+			@apply scroll-auto;
+		}
+	}
+
+	body {
+		@apply bg-bkg;
+	}
+
+	::-webkit-scrollbar {
+		@apply w-scrollbarWidth;
+	}
+
+	::-webkit-scrollbar-track {
+		@apply bg-transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		@apply rounded-3xl bg-primary bg-clip-padding;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		@apply bg-accent;
 	}
 }
 
-@media (--desktop) {
-}
+@layer components {
+	[class~='emoji'] {
+		@apply inline-flex h-5 w-5;
+	}
 
-@media (--tablet) {
-}
-
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-html {
-	user-select: none;
-	scroll-behavior: smooth;
-}
-
-body {
-	background: var(--c-bkg);
-	font-family: var(--ff-sans);
-	color: var(--c-mainText);
-	overflow-x: hidden;
-	overscroll-behavior: none;
-}
-
-main {
-	position: relative;
-	min-height: 100vh;
-	min-height: 100dvh;
-	width: 100%;
-}
-
-button {
-	outline: transparent;
-}
-
-ul {
-	list-style: none;
-}
-
-a {
-	text-decoration: none;
-	color: inherit;
-}
-
-h1,
-h2,
-h3 {
-	font-size: inherit;
-}
-
-.input {
-	display: flex;
-	align-items: center;
-}
-
-.form {
-	display: flex;
-	flex-direction: column;
-}
-
-.stack {
-	display: grid;
-	grid-template-areas: 'stack';
-	place-items: center;
-}
-
-.stack > * {
-	grid-area: stack;
-}
-
-::-webkit-scrollbar {
-	height: 1px;
-	width: var(--w-scrollbar);
-}
-
-::-webkit-scrollbar-track {
-	background-color: black;
-}
-
-::-webkit-scrollbar-thumb {
-	border-radius: var(--br-3xl);
-	background-color: var(--c-main);
-	background-clip: padding-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-	background-color: var(--c-accent);
+	h4 [class~='emoji'] {
+		@apply inline-flex h-9 w-9;
+	}
 }
 
 @font-face {
@@ -145,6 +106,7 @@ h3 {
 	font-weight: normal;
 	font-display: block;
 }
+
 
 @font-face {
 	font-family: 'LINE';

@@ -2,6 +2,7 @@ const autoprefixer = require('autoprefixer');
 const postcssPresetEnv = require('postcss-preset-env');
 const csso = require('postcss-csso');
 const postcssGlobalData = require('@csstools/postcss-global-data');
+const tailwind = require('tailwindcss');
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -17,6 +18,7 @@ const config = {
 				'media-query-ranges': true,
 			},
 		}),
+		tailwind(),
 		autoprefixer(),
 		csso(),
 	],
