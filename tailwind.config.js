@@ -2,7 +2,7 @@
 const plugin = require('tailwindcss/plugin');
 const defaultTheme = require('tailwindcss/defaultTheme');
 
-export default {
+module.exports = {
 	content: ['src/routes/**/*.{svelte,js,ts,html}', 'src/components/**/*.{svelte,js,ts,html}'],
 	daisyui: {
 		themes: [
@@ -28,28 +28,30 @@ export default {
 				content: 'hsl(var(--content) / <alpha-value>)',
 			},
 			width: {
-				scrollbarWidth: 'var(--scrollbarWidth)',
-				layoutWidth: 'calc(100vw - var(--scrollbarWidth))',
-				sidebar: 'var(--sidebar)',
+				scrollbar: 'var(--w-scrollbar)',
+				layout: 'calc(100vw - var(--w-scrollbar))',
+				sidebar: 'var(--w-sidebar)',
 			},
 			height: {
-				nav: 'var(--navHeight)',
-				layoutHeight: 'calc(100vh - var(--navHeight))',
+				nav: 'var(--h-nav)',
+				layout: 'calc(100vh - var(--h-nav))',
 			},
 			padding: {
-				nav: 'var(--navHeight)',
+				nav: 'var(--h-nav)',
 			},
 			margin: {
-				nav: 'var(--navHeight)',
+				nav: 'var(--h-nav)',
 			},
 			scrollPadding: {
-				nav: 'var(--navHeight)',
+				nav: 'var(--h-nav)',
 			},
 		},
 		fontFamily: {
 			sans: ['Pretendard', ...defaultTheme.fontFamily.sans],
 			serif: [...defaultTheme.fontFamily.serif],
 			mono: [...defaultTheme.fontFamily.mono],
+			basis: ['Basis'],
+			line: ['Line'],
 		},
 		fontSize: {
 			xs: 'clamp(0.64rem, calc(0.67rem + -0.04vw), 0.66rem)',
@@ -66,7 +68,6 @@ export default {
 	plugins: [
 		require('daisyui'),
 		require('@tailwindcss/aspect-ratio'),
-		require('tailwindcss-brand-colors'),
 		require('tailwindcss-debug-screens'),
 
 		plugin(({ addUtilities, addComponents, addBase, addVariant, matchVariant, theme }) => {

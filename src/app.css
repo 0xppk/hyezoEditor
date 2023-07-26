@@ -18,12 +18,17 @@
 		--b1: 0deg 0% 100%;
 		/* 컬러 */
 		--bkg: 49deg 35% 94%;
-		--content: 217deg 32.6% 17.5%;
+		--content: 217deg 33% 18%;
+		--icon-color: hsl(217, 33%, 18%);
+		--border-color: black;
 		/* 높이 */
-		--navHeight: 3.5rem;
+		--h-nav: 3.5rem;
+		--h-sticky-header: 2vh;
 		/* 넓이 */
-		--scrollbarWidth: 1px;
-		--sidebar: 12rem;
+		--w-scrollbar: 1px;
+		--w-sidebar: 12rem;
+		/* 패딩 */
+		--p-nav: calc(0.2em + var(--h-nav)) 0.3em;
 	}
 
 	:root[data-theme='dark'] {
@@ -41,6 +46,8 @@
 
 		--bkg: 218deg 13% 12%;
 		--content: 0deg 2% 95%;
+		--icon-color: hsl(0, 2%, 95%);
+		--border-color: hsla(0, 0%, 90%, 0.801);
 	}
 
 	@media (prefers-color-scheme: dark) {
@@ -70,11 +77,11 @@
 	}
 
 	body {
-		@apply bg-bkg;
+		@apply overscroll-none bg-bkg text-content;
 	}
 
 	::-webkit-scrollbar {
-		@apply w-scrollbarWidth;
+		@apply w-scrollbar;
 	}
 
 	::-webkit-scrollbar-track {
@@ -106,7 +113,6 @@
 	font-weight: normal;
 	font-display: block;
 }
-
 
 @font-face {
 	font-family: 'LINE';

@@ -1,11 +1,13 @@
-const autoprefixer = require('autoprefixer');
-const postcssPresetEnv = require('postcss-preset-env');
-const csso = require('postcss-csso');
 const postcssGlobalData = require('@csstools/postcss-global-data');
-const tailwind = require('tailwindcss');
+const autoprefixer = require('autoprefixer');
+const csso = require('postcss-csso');
+const postcssPresetEnv = require('postcss-preset-env');
+const tailwindcss = require('tailwindcss');
+const tailwindcssNesting = require('tailwindcss/nesting');
+const postcssNesting = require('postcss-nesting');
 
 /** @type {import('@sveltejs/kit').Config} */
-const config = {
+module.exports = {
 	plugins: [
 		postcssGlobalData({
 			files: ['./src/lib/styles/custom-media-queries.css'],
@@ -18,10 +20,9 @@ const config = {
 				'media-query-ranges': true,
 			},
 		}),
-		tailwind(),
-		autoprefixer(),
-		csso(),
+		tailwindcssNesting(postcssNesting),
+		tailwindcss,
+		autoprefixer,
+		csso,
 	],
 };
-
-module.exports = config;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getArchive } from '$lib/context/archive';
+	import { getArchive } from '$lib/contexts/archive';
 	import { db } from '$lib/db/client';
 	import { countWords } from '$lib/utils';
 	import { afterUpdate } from 'svelte';

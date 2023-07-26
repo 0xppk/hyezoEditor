@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { getArchive } from '$lib/context/archive';
+	import { getArchive } from '$lib/contexts/archive';
 	import { db } from '$lib/db/client';
 	import { countWords } from '$lib/utils';
 	import { afterUpdate } from 'svelte';
@@ -22,7 +22,7 @@
 
 	// 라이프 사이클
 	function scrollToBottom(el: HTMLElement) {
-		el.scrollTop = el.scrollHeight;
+		el.scrollTop = el.scrollHeight - el.clientHeight;
 	}
 	afterUpdate(() => scrollToBottom(wrapperDiv));
 
@@ -59,7 +59,7 @@
 	<section bind:this={wrapperDiv} class="flex-grow overflow-y-scroll scroll-smooth">
 		<!-- 타이틀 -->
 		<input
-			class="mb-5 mt-10 w-full bg-bkg text-center text-3xl font-semibold outline-none placeholder:text-content/30"
+			class="mb-5 mt-10 w-full bg-bkg px-10 text-center font-line text-3xl font-semibold outline-none placeholder:text-content/30"
 			aria-label="제목 영역 글쓰기 에디터"
 			spellcheck="false"
 			placeholder="제목을 입력해주세요"
@@ -102,22 +102,19 @@
 		<div class="flex items-center gap-3">
 			<span class="text-right text-primary">{countWords(content)}</span>
 			<button
-				class="btn-primary btn-outline btn-sm btn w-14"
+				class="btn btn-primary btn-outline btn-sm"
 				on:click={e => {
 					e.preventDefault();
 					typingMode = !typingMode;
 					contentDiv.focus();
 				}}
 			>
-				눌러
+				타자기 모드
 			</button>
-			<button
-				class="btn-primary btn-outline btn-sm btn w-14"
-				on:click={() => createNewPost('public')}
-			>
+			<button class="btn btn-primary btn-outline btn-sm" on:click={() => createNewPost('public')}>
 				발행
 			</button>
-			<button on:click={() => createNewPost()} class="btn-primary btn-outline btn-sm btn w-14">
+			<button on:click={() => createNewPost()} class="btn btn-primary btn-outline btn-sm">
 				저장
 			</button>
 		</div>
@@ -128,7 +125,7 @@
 	<form method="dialog" class="modal-box grid place-items-center gap-5">
 		<input type="text" bind:value={selectedAchive.name} class="input w-full outline-none" />
 		<button
-			class="btn-ghost btn-sm btn w-full"
+			class="btn btn-ghost btn-sm w-full"
 			disabled={!selectedAchive}
 			on:click={async () => {
 				const newArchive = await db.createArchive(selectedAchive.name);

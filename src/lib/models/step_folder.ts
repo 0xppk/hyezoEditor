@@ -9,7 +9,7 @@ type Options = {
 export class StepFolder implements ScrollEffect {
 	sticky: HTMLDivElement;
 	children: NodeListOf<HTMLElement> | null;
-	headerHeight: number;
+	headerHeightVh: number;
 	headerOffsetHeight: number;
 	scrollHandler: () => void;
 	resizeHandler: () => void;
@@ -18,7 +18,7 @@ export class StepFolder implements ScrollEffect {
 		this.sticky = options.sticky;
 		this.children = null;
 
-		this.headerHeight = 2;
+		this.headerHeightVh = 2;
 		this.headerOffsetHeight = 0;
 
 		// TODO: nav length 3부터 한칸씩 밀어올릴 방법 궁리하기(23.07.13)
@@ -34,13 +34,12 @@ export class StepFolder implements ScrollEffect {
 
 	setup() {
 		this.children = this.sticky.querySelectorAll('section');
+		this.headerOffsetHeight = this.sticky.querySelector('header')!.offsetHeight;
 
 		this.children.forEach(section => {
 			const title = section.querySelector('header');
-			title?.style.setProperty('--nav-height', `${this.headerHeight}vh`);
+			if (title) title.style.height = `${this.headerHeightVh}vh`;
 		});
-
-		this.headerOffsetHeight = this.sticky.querySelector('header')!.offsetHeight;
 	}
 
 	scrollSetup() {
@@ -76,11 +75,11 @@ export class StepFolder implements ScrollEffect {
 			const phase = innerHeight - this.headerOffsetHeight,
 				s = innerHeight * i - this.headerOffsetHeight * (i - 1),
 				e = innerHeight * (i + 1) - this.headerOffsetHeight * i,
-				contentHeight = -100 + this.headerHeight * i;
+				contentHeight = -100 + this.headerHeightVh * i;
 
 			const image = section.querySelector('img'),
 				marquee = section.querySelector('.marquee') as HTMLDivElement;
-			if (image) image.style.height = Math.abs(contentHeight) - this.headerHeight + '%';
+			if (image) image.style.height = Math.abs(contentHeight) - this.headerHeightVh + '%';
 
 			if (scrollY <= s) {
 				section.style.transform = `translate3d(0, 0, 0)`;

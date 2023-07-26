@@ -2,47 +2,52 @@
 	import { Icons } from '@components';
 </script>
 
-<div class="wrapper">
+<div class="wrapper font-line">
 	<div class="row">
 		<span>between</span>
-		<div class="quote">
-			<p>if you're going to do something,</p>
-			<p class="center">do it to a death.</p>
-			<p class="right">otherwise, don't bother starting.</p>
+		<div class="quote font-basis text-sm">
+			<p>hello</p>
+		</div>
+		<div class="quote font-basis text-sm">
+			<p>always asking myself</p>
+			<p class="text-center">"what is memorable things?"</p>
 		</div>
 	</div>
 	<div class="row">
 		<span>paren</span>
-		<div class="stack">
+		<div class="stacking">
 			<Icons src="loader" />
 			<span>t</span>
 		</div>
 		<span>heses</span>
 		<span>: </span>
 	</div>
+
 	<div class="row">
 		<span>Ne</span>
-		<div class="stack">
+		<div class="stacking">
 			<span>v</span>
 			<Icons src="vol" />
 		</div>
 		<span>er</span>
 		<span>&nbsp;</span>
 		<span>lo</span>
-		<div class="stack">
+		<div class="stacking">
 			<span>s</span>
 			<Icons src="zap" />
 		</div>
 		<span>e</span>
 	</div>
+
 	<div class="row">
 		<span>terr</span>
-		<div class="stack">
+		<div class="stacking">
 			<Icons src="egg" />
 			<span>o</span>
 		</div>
 		<span>r</span>
 	</div>
+
 	<div class="row">
 		<span class="circle" />
 		<span>f</span>
@@ -52,7 +57,7 @@
 		<span>s</span>
 		<span>i</span>
 		<span>len</span>
-		<div class="stack">
+		<div class="stacking">
 			<span>c</span>
 			<Icons src="silence" />
 		</div>
@@ -60,84 +65,95 @@
 	</div>
 </div>
 
-<style>
-	:root {
-		--text: clamp(2rem, calc(1.58rem + 6.07vw), 10rem);
-		--border: clamp(0.5rem, calc(0.34rem + 0.69vw), 1.3rem);
-		--padding: clamp(0.8rem, calc(0.47rem + 1.39vw), 2.4rem);
-		--margin: clamp(0.05em, calc(0.07rem + -0.02vw), 0.07em);
-	}
-
+<style lang="postcss">
 	.wrapper {
-		font: var(--text) var(--ff-line);
+		font-size: clamp(1.5rem, calc(1.28rem + 5.77vw), 10rem);
 		padding: calc(1em + var(--h-nav)) 0;
 		line-height: 1;
 		text-transform: uppercase;
-		position: relative;
+		position: absolute;
 	}
 
 	.row {
 		display: flex;
 		align-items: center;
-		position: static;
 	}
 
-	.stack > span:nth-child(1),
-	.stack > :global(.icon):nth-child(1) {
-		animation: fadeOffBeat 1.5s ease-in 0s infinite;
+	.stacking {
+		display: grid;
+		grid-template-areas: 'stacking';
+		place-items: center;
 	}
 
-	.stack > span:nth-child(2),
-	.stack > :global(.icon):nth-child(2) {
-		animation: fade 1.5s ease-out 0s infinite;
+	.stacking > * {
+		grid-area: stacking;
+	}
+
+	.stacking > span:nth-child(1),
+	.stacking > :global(.icon):nth-child(1) {
+		animation: fadeOffBeat 1.5s ease-in infinite;
+		animation-delay: 200ms;
+	}
+
+	.stacking > span:nth-child(2),
+	.stacking > :global(.icon):nth-child(2) {
+		animation: fade 1.5s ease-out infinite;
 	}
 
 	:global(.icon) {
 		padding-top: 0.2rem;
 		position: absolute;
-		font-size: var(--text);
+
+		&:hover {
+			background-color: transparent;
+		}
 	}
 
 	.circle {
-		border: var(--border) solid var(--c-mainText);
+		--border: clamp(0.3rem, calc(0.28rem + 0.79vw), 1.3rem);
+		--padding: clamp(0.5rem, calc(0.35rem + 1.19vw), 2.4rem);
+		--margin: clamp(0.04em, calc(0.05rem + -0.01vw), 0.07em);
+
 		border-radius: 5rem;
 		padding: var(--padding);
 		margin-top: var(--margin);
 		animation: long-O 3.5s ease-in-out 0s infinite;
+		border: var(--border) solid var(--icon-color);
 	}
 
 	.quote {
 		width: 15rem;
 		position: absolute;
-		bottom: -20%;
+		bottom: 0;
 		left: 5%;
-		font: var(--fs-sm) var(--ff-basis);
 		line-height: 1.4;
-		text-transform: lowercase;
-	}
-	.quote > .center {
-		text-align: center;
-	}
-	.quote > .right {
-		text-align: right;
+		text-transform: none;
 	}
 
 	@media (--desktop) {
-		.wrapper {
-			padding: calc(0.4em + var(--h-nav)) 0.3em;
-		}
 		.row {
 			position: relative;
 		}
-		.quote {
-			top: 10%;
-			left: 70%;
+		.wrapper {
+			padding: var(--p-nav);
+		}
+
+		.row:nth-child(1) .quote:nth-of-type(1) {
+			top: 20%;
+			left: 90%;
+			bottom: auto;
+		}
+
+		.row:nth-child(1) .quote:nth-of-type(2) {
+			top: 20%;
+			left: 100%;
 			bottom: auto;
 		}
 	}
 
 	@keyframes long-O {
-		from {
+		from,
+		to {
 			width: 3rem;
 		}
 		50% {
@@ -146,13 +162,11 @@
 		70% {
 			width: 18rem;
 		}
-		100% {
-			width: 3rem;
-		}
 	}
 
 	@keyframes fade {
-		from {
+		from,
+		to {
 			opacity: 0;
 		}
 		33% {
@@ -161,20 +175,15 @@
 		55% {
 			opacity: 1;
 		}
-		to {
-			opacity: 0;
-		}
 	}
 
 	@keyframes fadeOffBeat {
-		from {
+		from,
+		to {
 			opacity: 1;
 		}
 		50% {
 			opacity: 0;
-		}
-		to {
-			opacity: 1;
 		}
 	}
 </style>
