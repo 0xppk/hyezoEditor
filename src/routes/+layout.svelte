@@ -2,6 +2,8 @@
 	import { NavBar } from '@components';
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { fade, fly } from 'svelte/transition';
+	import { page } from '$app/stores';
 	import '../app.css';
 
 	export let data;
@@ -21,5 +23,18 @@
 
 <NavBar />
 <main>
-	<slot />
+	{#key $page.url.pathname}
+		<div in:fade={{ duration: 500 }}>
+			<slot />
+		</div>
+	{/key}
 </main>
+
+<style>
+	main {
+		position: relative;
+		min-height: 100vh;
+		min-height: 100dvh;
+		max-width: 100%;
+	}
+</style>
