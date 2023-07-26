@@ -59,3 +59,11 @@ export const groupSchema = z.object({
 	id: z.string().uuid(),
 	groupname: z.string().min(1),
 });
+
+const fileSchema = z.custom<File>();
+
+export const updateProfileSchema = z.object({
+	username: z.string().optional(),
+	website: z.string().optional(),
+	avatar: fileSchema.optional(),
+});

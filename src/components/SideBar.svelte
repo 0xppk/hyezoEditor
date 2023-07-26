@@ -2,6 +2,7 @@
 </script>
 
 <aside aria-label="sidebar" class="sidebar">
+	<h2><slot name="username" /></h2>
 	<slot name="title" />
 	<hr />
 	<slot name="navList" />
@@ -9,9 +10,6 @@
 
 <style>
 	.sidebar {
-		position: fixed;
-		left: 0;
-		margin-left: 1.5rem;
 		width: var(--w-sidebar);
 		cursor: default;
 		display: flex;
@@ -19,7 +17,6 @@
 		align-items: stretch;
 		gap: 1rem;
 		overflow-y: auto;
-		border-radius: var(--br-lg);
 		padding: 1.2rem 0.5rem;
 	}
 </style>
