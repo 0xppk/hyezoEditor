@@ -6,3 +6,7 @@ export { default as Viewer } from './Viewer.svelte';
 export { default as NavLink } from './NavLink.svelte';
 export { default as Modal } from './Modal.svelte';
 export { default as RotateText } from './RotateText.svelte';
+export { default as DarkMode } from './DarkMode.svelte';
+export { default as HamburgerMenu } from './HamburgerMenu.svelte';
+export { default as Logo } from './Logo.svelte';
+export { default as SignIn } from './SignIn.svelte';

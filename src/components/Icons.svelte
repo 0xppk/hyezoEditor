@@ -18,6 +18,9 @@
 		silence: 'clarity:moon-line',
 		light: 'line-md:moon-alt-to-sunny-outline-loop-transition',
 		dark: 'line-md:moon-rising-alt-loop',
+		hamburger: 'ci:hamburger-md',
+		signIn: 'octicon:sign-in-16',
+		plus: 'ph:plus-circle',
 	};
 </script>
 

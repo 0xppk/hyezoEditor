@@ -13,7 +13,9 @@ export const images = [
 ];
 
 export const navConfig = [
+	{ href: '/', name: 'Home' },
 	{ href: '/post', name: 'Post' },
 	{ href: '/archive', name: 'Archive' },
 	{ href: '/group', name: 'Commune' },
+	{ href: '/profile', name: 'Profile' },
 ];
