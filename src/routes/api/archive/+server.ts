@@ -30,7 +30,6 @@ export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 	if (!session) throw error(500, { message: '다시 로그인해 주세요' });
 
 	const { name } = archiveSchema.pick({ name: true }).parse(await request.json());
-	console.log(name);
 	const { data, error: createArchiveError } = await supabase
 		.from('archives')
 		.insert({ author_id: session.user.id, name })
@@ -39,7 +38,6 @@ export const POST = (async ({ request, locals: { supabase, getSession } }) => {
 	if (createArchiveError) throw error(500, { message: '아카이브 생성 실패' });
 
 	const newArchive = archiveSchema.parse(data[0]);
-	console.log(newArchive);
 	return json({ data: newArchive, success: true }, { status: 201 });
 }) satisfies RequestHandler;
 
@@ -52,7 +50,6 @@ export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session) throw error(500, { message: '다시 로그인해 주세요' });
 
-	console.log(id, name);
 	const { data, error: isError } = await supabase
 		.from('archives')
 		.update({ name })

@@ -25,8 +25,7 @@
 				{index}
 				{originalContents}
 				{isEdited}
-				{youtubeFormatter}
-			/>
+				{youtubeFormatter} />
 		{/each}
 	{:else}
 		<div class="not-found">
@@ -38,7 +37,7 @@
 <style>
 	.wrapper {
 		width: 100%;
-		padding-top: 1.2rem;
+		padding: var(--p-nav);
 	}
 
 	.not-found {

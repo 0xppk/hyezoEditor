@@ -9,24 +9,6 @@
 	};
 </script>
 
-<div class="container">
+<div class="h-layout w-full py-20 sm:block sm:p-20 md:max-w-3xl lg:max-w-6xl lg:p-60">
 	<Editor content={value} {youtubeFormatter} />
 </div>
-
-<style>
-	.container {
-		height: var(--h-layoutHeight);
-		width: 100%;
-		display: flex;
-		align-items: center;
-		padding: 1.2rem 0;
-	}
-
-	@media (--tablet) {
-		.container {
-			display: block;
-			align-items: start;
-			padding: 15rem;
-		}
-	}
-</style>

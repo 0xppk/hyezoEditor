@@ -7,12 +7,12 @@
 </div>
 
 <style>
-	.error{
+	.error {
 		position: fixed;
 		bottom: 0;
 		display: flex;
 		flex-direction: column;
-		height: var(--h-layoutHeight);
+		height: var(--h-layout);
 		justify-content: center;
 	}
 

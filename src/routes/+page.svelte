@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { piled_menu_showList as showList } from '$lib/config';
-	import { StepFolder } from '$lib/model/step_folder';
+	import { StepFolder } from '$lib/models/step_folder';
 	import { RotateText } from '@components';
 	import { onMount } from 'svelte';
 
-	let sticky: HTMLDivElement | null;
+	let sticky: HTMLDivElement;
 
 	onMount(() => {
 		scrollTo({ top: 0 });
@@ -13,15 +13,15 @@
 	});
 </script>
 
-<div class="container">
-	<div bind:this={sticky} class="sticky">
-		<div class="hero">
+<div class="container bg-bkg">
+	<div bind:this={sticky} class="sticky-wrapper">
+		<div class="hero-section">
 			<RotateText />
 		</div>
 		{#each showList as { title, src, category, description } (title)}
-			<section>
-				<header>
-					<h3 class="title">{title}</h3>
+			<section class="bg-bkg">
+				<header class="font-basis text-sm">
+					<span class="font-basis text-sm">{title}</span>
 					<span>{description}</span>
 					<span>{category}</span>
 				</header>
@@ -33,7 +33,7 @@
 	</div>
 </div>
 
-<footer>
+<footer class="bg-bkg font-basis text-sm">
 	<div>&nbsp;</div>
 	<div>&copy; 2023</div>
 	<div>hyezoprk</div>
@@ -47,24 +47,22 @@
 	<div>Developed by</div>
 	<div style="text-transform: uppercase;">🍑 svelte</div>
 	<div>&nbsp;</div>
-	<div>&nbsp;</div>
 </footer>
 
 <style type="postcss">
 	.container {
-		background-color: var(--c-bkg);
-		width: 100%;
+		max-width: 100%;
 		min-height: 590vh;
+		position: relative;
 	}
 
-	.sticky {
+	.sticky-wrapper {
 		position: sticky;
 		top: 0;
-		width: 100%;
 		max-height: 100vh;
 	}
 
-	.hero {
+	.hero-section {
 		min-height: 100vh;
 		font-size: 2rem;
 		padding: 1em;
@@ -73,7 +71,7 @@
 
 	:global(.marquee-wrapper) {
 		overflow-x: hidden;
-		border-top: 1px solid var(--c-border);
+		border-top: 1px solid var(--border-color);
 		min-height: 100vh;
 	}
 
@@ -104,23 +102,24 @@
 		width: 100%;
 		height: 100%;
 		position: absolute;
-		background: var(--c-bkg);
 
 		& header {
-			height: var(--nav-height);
-			border-top: 1px solid var(--c-border);
+			height: 2vh;
+			border-top: 1px solid var(--border-color);
 			padding: 0 0.5em;
-			font: var(--fs-sm) var(--ff-basis);
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
 			text-transform: uppercase;
+
 			& * {
 				width: 100%;
 			}
+
 			& *:nth-child(2) {
 				text-align: center;
 			}
+
 			& *:nth-child(3) {
 				text-align: right;
 			}
@@ -131,6 +130,7 @@
 			overflow: hidden;
 			transform-origin: 'top right';
 			transform: scale(0);
+
 			& img {
 				display: block;
 				max-width: 100%;
@@ -143,15 +143,15 @@
 		width: 100%;
 		position: absolute;
 		bottom: -8vh;
-		font: var(--fs-sm) var(--ff-basis);
 		display: flex;
 		flex-direction: column;
+
 		& div {
 			display: flex;
 			flex-grow: 1;
 			align-items: center;
 			justify-content: space-between;
-			border-top: 1px solid var(--c-border);
+			border-top: 1px solid var(--border-color);
 			padding: 0.4em 1em;
 		}
 	}

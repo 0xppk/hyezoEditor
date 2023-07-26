@@ -1,7 +1,6 @@
 <script lang="ts">
 	export let modalDiv: HTMLDialogElement;
 	export let selectedAchive: string;
-	$: console.log(modalDiv);
 </script>
 
 <dialog bind:this={modalDiv} class="modal">

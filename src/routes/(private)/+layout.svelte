@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setArchive } from '$lib/context/archive.js';
+	import { setArchive } from '$lib/contexts/archive.js';
 
 	export let data;
 	let { archiveData } = data;
@@ -9,22 +9,23 @@
 	setArchive(archiveData);
 </script>
 
-<div class="container">
+<div class="layout">
 	<slot />
 </div>
 
 <style>
-	.container {
+	.layout {
+		min-height: inherit;
 		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 0 1.5rem;
+		padding: 1rem 1.5rem;
 	}
 
 	@media (--tablet) {
-		.container {
-			padding: 0 2.5rem
+		.layout {
+			padding: 1.5rem 2.5rem;
 		}
 	}
 </style>
