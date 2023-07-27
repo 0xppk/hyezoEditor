@@ -7,6 +7,6 @@
 	}
 </script>
 
-<button on:click={onClick} class="btn btn-ghost p-[1.5em]">
+<button on:click={onClick} class="btn btn-ghost pb-1">
 	<Icons src="signIn" />
 </button>

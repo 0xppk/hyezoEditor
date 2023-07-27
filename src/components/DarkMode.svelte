@@ -31,7 +31,7 @@
 </script>
 
 <button
-	class="btn btn-ghost p-[1.5em]"
+	class="btn btn-ghost pb-1"
 	on:click={toggleTheme}
 	aria-label={`다크모드 토글 스위치. 현재 테마는 ${currentTheme}`}
 >

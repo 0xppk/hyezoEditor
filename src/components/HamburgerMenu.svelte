@@ -11,7 +11,7 @@
 <div class="drawer drawer-end">
 	<input id="hamburger" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content">
-		<label for="hamburger" class="btn btn-ghost drawer-button h-full items-center p-[1.5em]">
+		<label for="hamburger" class="btn btn-ghost drawer-button h-full items-center pb-1">
 			<Icons src="hamburger" style={`font-size: 2rem`} />
 		</label>
 	</div>
@@ -26,9 +26,3 @@
 		</ul>
 	</div>
 </div>
-
-<!-- <div
-	class={`fixed right-0 top-0 z-10 min-h-screen w-80 rounded-md bg-bkg duration-500 ease-in-out ${
-		hamburgerToggle === 'open' ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-	}`}
-/> -->
