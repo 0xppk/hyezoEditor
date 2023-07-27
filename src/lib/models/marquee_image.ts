@@ -14,7 +14,7 @@ type Options = {
 export class MarqueeImage implements MarqueeEffect {
 	element: HTMLDivElement | null;
 	children: NodeListOf<HTMLImageElement> | null;
-	images: Image[];
+	images: Image[] | null;
 	distance: number;
 	velocity: number;
 	direction: 1 | -1;
@@ -40,7 +40,7 @@ export class MarqueeImage implements MarqueeEffect {
 	setup() {
 		if (this.images && this.element) {
 			this.element.style.display = 'flex';
-			this.images.push(...this.images);
+			this.images = [...this.images, ...this.images];
 			this.images.forEach(image => {
 				const img = document.createElement('img');
 				img.src = image.src;
@@ -59,6 +59,7 @@ export class MarqueeImage implements MarqueeEffect {
 
 	clearSetup() {
 		cancelAnimationFrame(this.rafId);
+		this.images = null;
 	}
 
 	flow() {

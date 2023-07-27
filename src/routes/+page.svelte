@@ -8,8 +8,8 @@
 
 	onMount(() => {
 		scrollTo({ top: 0 });
-		const stepFolder = new StepFolder({ sticky });
-		return () => stepFolder.clearSetup();
+		StepFolder.getInstance(sticky);
+		return () => StepFolder.removeInstance();
 	});
 </script>
 

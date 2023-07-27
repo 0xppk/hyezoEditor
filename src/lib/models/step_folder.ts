@@ -1,6 +1,6 @@
+import { images } from '$lib/config';
 import type { ScrollEffect } from '$lib/models/abstract';
 import { MarqueeImage } from './marquee_image';
-import { images } from '$lib/config';
 
 type Options = {
 	sticky: HTMLDivElement;
@@ -11,25 +11,48 @@ export class StepFolder implements ScrollEffect {
 	children: NodeListOf<HTMLElement> | null;
 	headerHeightVh: number;
 	headerOffsetHeight: number;
+	marqueeSection: HTMLElement | null;
+	marquee: MarqueeImage | null;
 	scrollHandler: () => void;
 	resizeHandler: () => void;
 
 	constructor(options: Options) {
+		if (StepFolder.instance) {
+			console.warn('StepFolder is singleton');
+		}
+
+		StepFolder.instance = this;
+
 		this.sticky = options.sticky;
 		this.children = null;
 
 		this.headerHeightVh = 2;
 		this.headerOffsetHeight = 0;
+		this.marqueeSection = null;
+		this.marquee = null;
 
 		// TODO: nav length 3부터 한칸씩 밀어올릴 방법 궁리하기(23.07.13)
 
 		this.scrollHandler = this.animate.bind(this);
 		this.resizeHandler = this.setup.bind(this);
-
 		this.createMarquee();
 		this.setup();
 		this.scrollSetup();
 		this.resizeSetup();
+	}
+	static instance: StepFolder | null;
+	static getInstance(sticky: HTMLDivElement) {
+		if (!this.instance) {
+			this.instance = new StepFolder({
+				sticky,
+			});
+		}
+
+		return this.instance;
+	}
+	static removeInstance() {
+		this.instance?.clearSetup();
+		this.instance = null;
 	}
 
 	setup() {
@@ -53,21 +76,29 @@ export class StepFolder implements ScrollEffect {
 	clearSetup() {
 		removeEventListener('scroll', this.scrollHandler);
 		removeEventListener('resize', this.resizeHandler);
+		this.clearMarquee();
 	}
 
 	createMarquee() {
-		const newSection = document.createElement('section');
+		this.marqueeSection = document.createElement('section');
 		const newDiv = document.createElement('div');
-		newSection.appendChild(newDiv);
-		newSection.classList.add('marquee-wrapper');
+		this.marqueeSection.appendChild(newDiv);
+		this.marqueeSection.classList.add('marquee-wrapper');
 		newDiv.classList.add('marquee');
 
-		new MarqueeImage({
+		this.marquee = new MarqueeImage({
 			element: newDiv,
 			images,
 		});
 
-		this.sticky?.appendChild(newSection);
+		this.sticky?.appendChild(this.marqueeSection);
+	}
+
+	clearMarquee() {
+		this.marquee?.clearSetup();
+		this.marquee = null;
+
+		this.marqueeSection?.remove();
 	}
 
 	translateSection() {
@@ -133,8 +164,10 @@ export class StepFolder implements ScrollEffect {
 	}
 
 	animate() {
-		this.translateSection();
-		this.imageScaleUp();
-		this.imageScaleDown();
+		if (this.marquee) {
+			this.translateSection();
+			this.imageScaleUp();
+			this.imageScaleDown();
+		}
 	}
 }
