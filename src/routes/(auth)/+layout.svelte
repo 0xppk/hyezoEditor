@@ -1,3 +1,3 @@
-<div class="grid min-h-screen place-items-center pt-nav">
+<div class="grid min-h-screen place-items-center">
 	<slot />
 </div>

@@ -19,3 +19,5 @@ export const navConfig = [
 	{ href: '/group', name: 'Commune' },
 	{ href: '/profile', name: 'Profile' },
 ];
+
+export const DEFAULT_AVATAR = '/default_avatar.jpeg';

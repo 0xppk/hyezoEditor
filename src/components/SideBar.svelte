@@ -2,7 +2,7 @@
 </script>
 
 <aside aria-label="sidebar" class="sidebar">
-	<h2><slot name="username" /></h2>
+	<slot name="username" />
 	<slot name="title" />
 	<hr />
 	<slot name="navList" />

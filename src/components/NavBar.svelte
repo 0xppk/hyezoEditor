@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { HamburgerMenu, DarkMode, Logo, SignIn } from '@components';
+	import ProfileIcon from './ProfileIcon.svelte';
+	import { getUser } from '$lib/contexts/user';
 
 	let navbar_state: 'show' | 'hidden' = 'show';
+	const user = getUser();
 
 	function toggleNavbar() {
 		addEventListener('scroll', () => {
@@ -17,7 +20,11 @@
 	<Logo />
 
 	<div class="menu-wrapper">
-		<SignIn />
+		{#if $user.username}
+			<ProfileIcon />
+		{:else}
+			<SignIn />
+		{/if}
 		<DarkMode />
 		<HamburgerMenu />
 	</div>
@@ -54,7 +61,7 @@
 
 		.menu-wrapper {
 			display: flex;
-			gap: 0.25rem;
+			gap: 0.75rem;
 			align-items: center;
 		}
 	}

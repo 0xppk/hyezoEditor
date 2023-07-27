@@ -1,8 +1,8 @@
 import { updateProfileSchema } from '$lib/zodSchema.js';
-import type { Actions } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 
 export const actions = {
-	default: async ({ request, locals: { supabase, getSession } }) => {
+	default: async ({ request, locals: { supabase } }) => {
 		const formData = updateProfileSchema.parse(Object.fromEntries(await request.formData()));
 		const { username, website, avatar } = formData;
 		const {
@@ -20,9 +20,13 @@ export const actions = {
 			await supabase.from('profiles').update({ avatar_url: uuid }).eq('id', user?.id);
 		}
 	},
-} satisfies Actions;
 
-/* 	logout: async ({ locals: { supabase } }) => {
-		await supabase.auth.signOut();
+	deleteAccount: async ({ locals: { supabase } }) => {
+		const {
+			data: { user },
+		} = await supabase.auth.getUser();
+
+		await supabase.from('profiles').delete().eq('id', user?.id);
 		throw redirect(303, '/');
-	}, */
+	},
+} satisfies Actions;

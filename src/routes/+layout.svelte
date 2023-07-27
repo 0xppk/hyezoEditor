@@ -1,14 +1,11 @@
 <script lang="ts">
-	import { NavBar } from '@components';
 	import { invalidate } from '$app/navigation';
-	import { onMount } from 'svelte';
-	import { fade, fly } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import { NavBar } from '@components';
+	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
+	import { setUser } from '$lib/contexts/user';
 	import '../app.css';
-
-	export let data;
-	let { supabase, session } = data;
-	$: ({ supabase, session } = data);
 
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange((event, _session) => {
@@ -19,6 +16,11 @@
 
 		return () => data.subscription.unsubscribe();
 	});
+
+	export let data;
+	let { supabase, session, userData } = data;
+	$: ({ session, userData } = data);
+	$: setUser(userData);
 </script>
 
 <NavBar />

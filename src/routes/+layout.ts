@@ -1,5 +1,7 @@
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
+import { setUser } from '$lib/contexts/user';
 import { createSupabaseLoadClient } from '@supabase/auth-helpers-sveltekit';
+import type { Session } from '@supabase/supabase-js';
 import type { Load } from '@sveltejs/kit';
 
 export const load = (({ fetch, data, depends }) => {
@@ -14,8 +16,8 @@ export const load = (({ fetch, data, depends }) => {
 
 	return {
 		supabase,
-		session: data?.session,
 		theme: data?.theme,
-		userData: data?.userData,
+		session: data?.session as Session,
+		userData: data?.userData as UserData,
 	};
 }) satisfies Load;
