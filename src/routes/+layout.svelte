@@ -4,8 +4,10 @@
 	import { NavBar } from '@components';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { setUser } from '$lib/contexts/user';
 	import '../app.css';
+	export let data;
+	let { supabase, session, user } = data;
+	$: ({ session, user } = data);
 
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange((event, _session) => {
@@ -16,14 +18,9 @@
 
 		return () => data.subscription.unsubscribe();
 	});
-
-	export let data;
-	let { supabase, session, userData } = data;
-	$: ({ session, userData } = data);
-	$: setUser(userData);
 </script>
 
-<NavBar />
+<NavBar {user} />
 <main>
 	{#key $page.url.pathname}
 		<div in:fade={{ duration: 500 }}>

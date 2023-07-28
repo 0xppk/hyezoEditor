@@ -1,32 +1,40 @@
 import { updateProfileSchema } from '$lib/zodSchema.js';
-import { redirect, type Actions } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
+
+type UpdateProfileData = { username: string; website: string; avatar_url: string };
 
 export const actions = {
-	default: async ({ request, locals: { supabase } }) => {
+	updateProfile: async ({ request, locals: { supabase, getSession, getUser } }) => {
+		const session = await getSession();
+		if (!session) return fail(500, { message: '업데이트 권한이 없습니다', success: false });
+
 		const formData = updateProfileSchema.parse(Object.fromEntries(await request.formData()));
 		const { username, website, avatar } = formData;
-		const {
-			data: { user },
-		} = await supabase.auth.getUser();
+		const { user } = session;
 
-		if (username) await supabase.from('profiles').update({ username }).eq('id', user?.id);
-		if (website) await supabase.from('profiles').update({ website }).eq('id', user?.id);
-		if (avatar?.size) {
-			// todo: db 요청을 줄일 수 있는 방법? 1. param으로 avatar url 받아오기
+		const updateData: Partial<UpdateProfileData> = {};
+		if (username) updateData.username = username;
+		if (website) updateData.website = website;
+		if (avatar && avatar.size !== 0) {
 			const uuid = crypto.randomUUID();
-			const { data } = await supabase.from('profiles').select('avatar_url').eq('id', user?.id);
-			if (data) await supabase.storage.from('avatars').remove([data[0].avatar_url]);
-			await supabase.storage.from('avatars').upload(uuid, avatar);
-			await supabase.from('profiles').update({ avatar_url: uuid }).eq('id', user?.id);
+			await supabase.storage.from('avatars').upload(uuid, avatar, {
+				upsert: true,
+			});
+			updateData.avatar_url = uuid;
+		}
+
+		if (Object.keys(updateData).length > 0) {
+			await supabase.from('profiles').update(updateData).eq('id', user.id);
+			return { message: '프로필이 업데이트 되었습니다', success: true };
 		}
 	},
 
-	deleteAccount: async ({ locals: { supabase } }) => {
-		const {
-			data: { user },
-		} = await supabase.auth.getUser();
+	deleteAccount: async ({ locals: { supabase, getSession } }) => {
+		const session = await getSession();
+		if (!session) return fail(500, { message: '삭제 권한이 없습니다', success: false });
 
-		await supabase.from('profiles').delete().eq('id', user?.id);
+		await supabase.from('profiles').delete().eq('id', session?.user?.id);
+		await supabase.auth.signOut();
 		throw redirect(303, '/');
 	},
 } satisfies Actions;

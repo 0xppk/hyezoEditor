@@ -2,17 +2,16 @@
 	import { enhance } from '$app/forms';
 	import { DEFAULT_AVATAR } from '$lib/config/index.js';
 	import { getProfileState } from '$lib/contexts/profile.js';
-	import { getUser } from '$lib/contexts/user.js';
+	import Alert from '@components/Alert.svelte';
 	import { fade, fly } from 'svelte/transition';
-
 	export let data;
-	let { session, supabase } = data;
-	$: ({ session } = data);
-
+	let { supabase, user } = data;
+	$: ({ user } = data);
 	const profile_state = getProfileState();
-	const user = getUser();
+
 	let fileInput: HTMLInputElement;
 	let update_avatar = '';
+	let alert_state: 'show' | 'hidden' = 'hidden';
 
 	function displaySelectedImage(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
 		const input = e.target as HTMLInputElement;
@@ -27,21 +26,35 @@
 		fileInput.value = '';
 	}
 
+	function uploadImage() {
+		fileInput.click();
+	}
+
 	async function saveImageAsNull() {
 		if (update_avatar === DEFAULT_AVATAR) {
-			const avatar = $user.avatar.split('/').pop();
+			const avatar = user.avatar?.split('/').pop();
 			if (avatar) await supabase.storage.from('avatars').remove([avatar]);
-			user.updateAvatar(DEFAULT_AVATAR);
-			await supabase.from('profiles').update({ avatar_url: null }).eq('id', session.user.id);
+			await supabase.from('profiles').update({ avatar_url: null }).eq('id', user.id);
+			user.avatar = update_avatar;
 		}
+	}
+
+	function showAlert() {
+		alert_state = 'show';
 	}
 </script>
 
-<form id="update" method="POST" use:enhance enctype="multipart/form-data" class="w-full">
+<form
+	action="?/updateProfile"
+	method="POST"
+	use:enhance
+	enctype="multipart/form-data"
+	class="w-full"
+>
 	<!-- 프로필 타이틀, 저장/취소 버튼 -->
 	<section class="flex w-full items-center justify-between gap-6 px-5 pb-10 pt-44">
 		<img
-			src={$user.avatar}
+			src={user.avatar || DEFAULT_AVATAR}
 			alt="프사"
 			class="pointer-events-none z-10 h-14 w-14 rounded-full object-cover ring-1 ring-white ring-offset-4 ring-offset-white sm:h-20 sm:w-20 md:h-28 md:w-28 lg:h-40 lg:w-40"
 		/>
@@ -63,14 +76,20 @@
 	<!-- 인풋 리스트 -->
 	<section class="w-full">
 		<div class="flex items-center justify-start gap-10">
-			<label for="update" class="w-52 font-bold">username</label>
-			<input type="text" name="username" class="input input-sm grow" />
+			<label for="username" class="w-52 font-bold">username</label>
+			<input id="username" type="text" name="username" class="input input-sm grow" />
 		</div>
 		<hr />
 
 		<div class="flex items-center justify-start gap-10">
-			<label for="update" class="w-52 font-bold">website</label>
-			<input type="url" placeholder="https://" name="website" class="input input-sm grow" />
+			<label for="user-website" class="w-52 font-bold">website</label>
+			<input
+				id="user-website"
+				type="url"
+				placeholder="https://"
+				name="website"
+				class="input input-sm grow"
+			/>
 		</div>
 		<hr />
 
@@ -85,22 +104,27 @@
 				class="hidden"
 			/>
 			<div>
-				<label for="avatar" class="font-bold">your photo</label>
+				<p class="font-bold">your photo</p>
 				<p class="w-52 text-sm normal-case">This will be displayed on your profile</p>
 			</div>
 
 			<img
-				src={update_avatar || $user.avatar}
+				src={update_avatar || user.avatar}
 				class="h-16 w-16 rounded-full object-cover"
 				alt="profile"
 			/>
 
 			<div class="grow place-self-start">
-				<div class="flex justify-end gap-4">
-					<button on:click={removeImage} class="cursor-pointer text-sm text-red-600/70">
-						Remove
+				<div class="flex justify-end gap-2">
+					<button
+						on:click|preventDefault={removeImage}
+						class="btn btn-ghost btn-xs capitalize text-warning"
+					>
+						remove
 					</button>
-					<label for="input-file" class="cursor-pointer text-sm">upload</label>
+					<button on:click|preventDefault={uploadImage} class="btn btn-ghost btn-xs capitalize">
+						<label for="input-file" class="cursor-pointer">upload</label>
+					</button>
 				</div>
 			</div>
 		</div>
@@ -113,13 +137,16 @@
 		out:fade
 		use:enhance
 		method="POST"
-		action="deleteAccount"
+		action="?/deleteAccount"
 		class="w-full"
 	>
 		<hr />
 		<div class="flex items-center justify-start gap-10">
 			<label for="update" class="w-52 font-bold">delete account</label>
-			<button type="submit" class="btn btn-neutral">Delete</button>
+			<button on:click|preventDefault={showAlert} class="btn btn-warning">Delete</button>
+			{#if alert_state === 'show'}
+				<Alert />
+			{/if}
 		</div>
 	</form>
 {/if}

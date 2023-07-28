@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-
 	let auth_state: 'sign in' | 'sign up' = 'sign in';
 
 	function changeMode() {
@@ -10,7 +9,6 @@
 
 	function onRequest() {
 		if (auth_state === 'sign in') goto('/');
-		else if (auth_state === 'sign up') auth_state = 'sign in';
 	}
 </script>
 
@@ -25,10 +23,10 @@
 		action={auth_state === 'sign in' ? '?/login' : '?/register'}
 		class="form-control gap-2"
 	>
-		<input type="email" name="email" autocomplete="on" class="input" />
-		<input type="password" autocomplete="on" name="password" class="input" />
+		<input type="email" name="email" class="input" />
+		<input type="password" name="password" class="input" />
 		<button on:click|preventDefault={changeMode} class="text-blue-700">
-			{auth_state === 'sign in' ? 'You have no account?' : 'You already have an account?'}
+			{auth_state === 'sign in' ? "Don't you have an account?" : 'You already have an account?'}
 		</button>
 		<button type="submit" class="btn btn-primary" on:click={onRequest}>
 			{auth_state === 'sign in' ? 'sign in' : 'sign up'}

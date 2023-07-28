@@ -20,6 +20,17 @@ export const handle = (async ({ event, resolve }) => {
 		return session;
 	};
 
+	event.locals.getUser = async () => {
+		const session = await event.locals.getSession();
+		const { data } = await event.locals.supabase
+			.from('profiles')
+			.select('*')
+			.eq('id', session?.user.id);
+
+		const user = data?.[0];
+		return user;
+	};
+
 	const theme = event.cookies.get('siteTheme');
 
 	const response = resolve(event, {

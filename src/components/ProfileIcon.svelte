@@ -1,10 +1,7 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import { getUser } from '$lib/contexts/user';
-	import { fetcher } from '$lib/utils';
-
+	export let user: UserData;
 	let profile_icon: 'open' | 'close' = 'close';
-	const user = getUser();
 
 	function toggleProfileIcon() {
 		profile_icon = profile_icon === 'open' ? 'close' : 'open';
@@ -21,7 +18,7 @@
 <div class="dropdown dropdown-end">
 	<button on:click={toggleProfileIcon} class="avatar btn btn-ghost p-0">
 		<div class="mask mask-circle mx-1 w-7">
-			<img src={$user.avatar} alt="profile icon" />
+			<img src={user.avatar} alt="profile icon" />
 		</div>
 	</button>
 	<ul

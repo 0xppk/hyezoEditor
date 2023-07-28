@@ -2,21 +2,20 @@
 	import { setProfileState } from '$lib/contexts/profile.js';
 	import SideBar from '@components/SideBar.svelte';
 	export let data;
-	$: ({ userData } = data);
-
-	const profile_state = setProfileState('edit');
+	$: ({ user } = data);
+	const profile = setProfileState('edit');
 
 	function profileEdit() {
-		profile_state.syncWith('edit');
+		profile.setState('edit');
 	}
 	function profileDelte() {
-		profile_state.syncWith('delete');
+		profile.setState('delete');
 	}
 </script>
 
 <div class="profile-layout">
 	<SideBar>
-		<h2 slot="username">{userData.username || 'Guest'}</h2>
+		<h2 slot="username">{user.username || 'Guest'}</h2>
 		<span slot="title" class="font-bold">나의 계정 설정</span>
 		<ul slot="navList" class="flex flex-col gap-1">
 			<li>

@@ -6,7 +6,7 @@ function createProfileStateStore() {
 	const { subscribe, update } = writable<ProfileState>(initialState);
 	return {
 		subscribe,
-		syncWith: (newState: ProfileState) => update(_state => newState),
+		setState: (newState: ProfileState) => update(_state => newState),
 	};
 }
 

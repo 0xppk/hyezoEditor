@@ -7,7 +7,7 @@ export function getProfileState() {
 
 export function setProfileState(data: ProfileState) {
 	setContext('profile_state', profile_state);
-	getProfileState().syncWith(data);
+	getProfileState().setState(data);
 
 	return getProfileState();
 }

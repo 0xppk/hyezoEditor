@@ -1,37 +1,29 @@
-import { error, type ServerLoad } from '@sveltejs/kit';
+import { DEFAULT_AVATAR } from '$lib/config';
+import type { ServerLoad } from '@sveltejs/kit';
 
-export const load = (async ({ cookies, locals: { supabase, getSession } }) => {
+export const load = (async ({ cookies, locals: { supabase, getSession, getUser } }) => {
 	const theme = cookies.get('siteTheme');
 	const session = await getSession();
+	const user = await getUser();
 
-	const { data, error: isError } = await supabase
-		.from('profiles')
-		.select('username, avatar_url')
-		.eq('id', session?.user.id);
-
-	if (isError) throw error(500, 'Failed to fetch user data');
-
-	const { username, avatar_url } = data[0];
 	let avatar;
 
-	if (avatar_url) {
+	if (user?.avatar_url) {
 		const {
 			data: { publicUrl },
-		} = supabase.storage.from('avatars').getPublicUrl(avatar_url);
+		} = supabase.storage.from('avatars').getPublicUrl(user?.avatar_url);
 
 		avatar = publicUrl;
 	}
 
 	const userData = {
-		username,
-		avatar: avatar_url ? avatar : '/default_avatar.jpeg',
+		...user,
+		avatar: user?.avatar_url ? avatar : DEFAULT_AVATAR,
 	};
-
-	if (session) session.user.user_metadata = userData;
 
 	return {
 		theme,
 		session,
-		userData,
+		user: userData,
 	};
 }) satisfies ServerLoad;
