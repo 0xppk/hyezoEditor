@@ -25,7 +25,8 @@
 				{index}
 				{originalContents}
 				{isEdited}
-				{youtubeFormatter} />
+				{youtubeFormatter}
+			/>
 		{/each}
 	{:else}
 		<div class="not-found">

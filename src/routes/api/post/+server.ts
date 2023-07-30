@@ -65,8 +65,9 @@ export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
 		title,
 		content,
 		words_count,
+		archive_id,
 		status: isPublicityUpdate,
-	} = postSchema.omit({ archive_id: true }).parse(await request.json());
+	} = postSchema.parse(await request.json());
 
 	const session = await getSession();
 	if (!session) throw error(500, '다시 로그인해 주세요');
@@ -79,7 +80,7 @@ export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
 				.select('*, archives(name)')
 		: await supabase
 				.from('posts')
-				.update({ title, content, words_count })
+				.update({ title, content, words_count, archive_id })
 				.eq('id', id)
 				.select('*, archives(name)');
 

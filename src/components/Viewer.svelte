@@ -2,7 +2,7 @@
 	import { getArchive } from '$lib/contexts/archive';
 	import { db } from '$lib/db/client';
 	import { countWords } from '$lib/utils';
-	import { afterUpdate } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 	import Dropdown from './Dropdown.svelte';
 
 	export let post: TPost;
@@ -16,11 +16,12 @@
 
 	let contentDiv: HTMLElement;
 	let wrapperDiv: HTMLElement;
-	let typingMode: boolean = false; // true => 에디터 중앙 커서 고정
 	let modalDiv: HTMLDialogElement;
-	const archives = getArchive();
-	const originalArchiveName = $archives[index].name;
+	let typingMode: boolean = false; // true => 에디터 중앙 커서 고정
 	let selectedAchive: { id: string; name: string } = { id: '', name: '' };
+
+	const archives = getArchive();
+	$: originalArchiveName = $archives.find(archive => archive.id === archive_id)?.name;
 
 	// 이벤트 핸들러
 	function selectArchive(data: { id: string; name: string }) {
@@ -58,9 +59,16 @@
 	}
 
 	async function updatePost() {
-		const updatedPost = await db.updatePost({ id, content, title, words_count, archive_id });
+		const updatedPost = await db.updatePost({
+			id,
+			content,
+			title,
+			words_count,
+			archive_id: selectedAchive.id,
+		});
 
-		originalContents[index].content = updatedPost.content;
+		originalContents[index] = { title: updatedPost.title, content: updatedPost.content };
+		archive_id = updatedPost.archive_id;
 		isEdited[index] = false;
 	}
 
@@ -115,7 +123,7 @@
 				{/if}
 			</Dropdown>
 			<div class="line-clamp-1 flex px-2">
-				<span class="line-clamp-1 px-2">{originalArchiveName}</span>
+				<span class="line-clamp-1">{originalArchiveName}</span>
 				{#if originalArchiveName !== selectedAchive.name && selectedAchive.name !== ''}
 					<span class="line-clamp-1 px-2">👉🏻&nbsp; {selectedAchive.name}</span>
 				{/if}
@@ -126,12 +134,12 @@
 			<span class="text-right text-primary">{countWords(content)}</span>
 
 			{#if isEdited[index] || (originalArchiveName !== selectedAchive.name && selectedAchive.name !== '')}
-				<button class="btn-primary btn-outline btn-sm btn w-14" on:click={updatePost}>
+				<button class="btn btn-primary btn-outline btn-sm w-14" on:click={updatePost}>
 					수정
 				</button>
 			{:else if status === 'private'}
 				<button
-					class="btn-primary btn-outline btn-sm btn w-14"
+					class="btn btn-primary btn-outline btn-sm w-14"
 					disabled={isEdited[index]}
 					on:click={updatePublicity}
 				>
@@ -146,7 +154,7 @@
 	<form method="dialog" class="modal-box grid place-items-center gap-5">
 		<input type="text" bind:value={selectedAchive.name} class="input w-full outline-none" />
 		<button
-			class="btn-ghost btn-sm btn w-full"
+			class="btn btn-ghost btn-sm w-full"
 			disabled={!selectedAchive.name}
 			on:click={async () => {
 				const newArchive = await db.createArchive(selectedAchive.name);
