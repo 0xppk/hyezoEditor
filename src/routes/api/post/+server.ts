@@ -1,10 +1,4 @@
-import {
-	archiveIdSchema,
-	archiveSchema,
-	postIdSchema,
-	postSchema,
-	postsSchema,
-} from '$lib/zodSchema.js';
+import { postIdSchema, postSchema, postsSchema } from '$lib/zodSchema.js';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 
 /**
@@ -89,4 +83,20 @@ export const PATCH = (async ({ request, locals: { supabase, getSession } }) => {
 	const updatedPost = postSchema.parse(data[0]);
 
 	return json({ data: updatedPost, success: true }, { status: 201 });
+}) satisfies RequestHandler;
+
+/**
+ * 없애기
+ */
+export const DELETE = (async ({ request, locals: { supabase, getSession } }) => {
+	const session = await getSession();
+	if (!session) throw error(500, '다시 로그인해 주세요');
+
+	const { id } = postSchema.pick({ id: true }).parse(await request.json());
+
+	const { error: deletePostError } = await supabase.from('posts').delete().eq('id', id);
+
+	if (deletePostError) throw error(500, '포스트 삭제 에러');
+
+	return json({ success: true }, { status: 201 });
 }) satisfies RequestHandler;

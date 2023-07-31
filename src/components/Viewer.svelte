@@ -9,7 +9,7 @@
 	let { id, title, content, words_count, status, archive_id } = post;
 	export let index: number = 0;
 	export let isEdited: boolean[] = [];
-	export let originalContents: { title: string; content: string }[] = [];
+	export let originalContents: { title: string; content: string; archive_name: string }[] = [];
 	export let youtubeFormatter: (value: string, index: number) => void;
 
 	$: words_count = countWords(content);
@@ -18,18 +18,9 @@
 	let wrapperDiv: HTMLElement;
 	let modalDiv: HTMLDialogElement;
 	let typingMode: boolean = false; // true => 에디터 중앙 커서 고정
-	let selectedAchive: { id: string; name: string } = { id: '', name: '' };
-
+	let isDeleted: boolean = false;
+	let selectedAchive: { id: string; name: string } = { id: archive_id, name: '' };
 	const archives = getArchive();
-	$: originalArchiveName = $archives.find(archive => archive.id === archive_id)?.name;
-
-	// 이벤트 핸들러
-	function selectArchive(data: { id: string; name: string }) {
-		selectedAchive = { ...data };
-		if (document.activeElement instanceof HTMLElement) {
-			document.activeElement.blur();
-		}
-	}
 
 	function scrollToBottom(el: HTMLElement) {
 		el.scrollTop = el.scrollHeight;
@@ -37,7 +28,13 @@
 	}
 	afterUpdate(() => scrollToBottom(wrapperDiv));
 
-	// 이벤트 핸들러
+	function selectArchive(data: { id: string; name: string }) {
+		selectedAchive = { ...data };
+		if (document.activeElement instanceof HTMLElement) {
+			document.activeElement.blur();
+		}
+	}
+	
 	function onKeyPress(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
 			e.preventDefault();
@@ -67,19 +64,30 @@
 			archive_id: selectedAchive.id,
 		});
 
-		originalContents[index] = { title: updatedPost.title, content: updatedPost.content };
+		originalContents[index] = {
+			title: updatedPost.title,
+			content: updatedPost.content,
+			archive_name: updatedPost.archives!.name,
+		};
 		archive_id = updatedPost.archive_id;
 		isEdited[index] = false;
 	}
 
-	function updatePublicity() {
-		db.updatePublicity({ id, status: 'public' });
+	async function updatePublicity() {
+		await db.updatePublicity({ id, status: 'public' });
 		status = 'public';
+	}
+
+	async function deletePost() {
+		const { success } = await db.deletePost(id);
+		isDeleted = success;
 	}
 </script>
 
 <article
-	class="mb-20 flex max-h-[40rem] min-h-[30rem] flex-col justify-center overflow-hidden rounded-xl border border-primary/50 outline-none"
+	class={`mb-20 max-h-[40rem] min-h-[30rem] flex-col justify-center overflow-hidden rounded-xl border border-primary/50 outline-none ${
+		isDeleted ? 'hidden' : 'flex'
+	}`}
 >
 	<section bind:this={wrapperDiv} class="flex-grow overflow-y-scroll scroll-smooth">
 		<!-- 타이틀 -->
@@ -123,8 +131,8 @@
 				{/if}
 			</Dropdown>
 			<div class="line-clamp-1 flex px-2">
-				<span class="line-clamp-1">{originalArchiveName}</span>
-				{#if originalArchiveName !== selectedAchive.name && selectedAchive.name !== ''}
+				<span class="line-clamp-1">{originalContents[index].archive_name}</span>
+				{#if originalContents[index].archive_name !== selectedAchive.name && selectedAchive.name !== ''}
 					<span class="line-clamp-1 px-2">👉🏻&nbsp; {selectedAchive.name}</span>
 				{/if}
 			</div>
@@ -132,8 +140,8 @@
 
 		<div class="flex items-center gap-3">
 			<span class="text-right text-primary">{countWords(content)}</span>
-
-			{#if isEdited[index] || (originalArchiveName !== selectedAchive.name && selectedAchive.name !== '')}
+			<button class="btn btn-primary btn-outline btn-sm w-14" on:click={deletePost}>삭제</button>
+			{#if isEdited[index] || (originalContents[index].archive_name !== selectedAchive.name && selectedAchive.name !== '')}
 				<button class="btn btn-primary btn-outline btn-sm w-14" on:click={updatePost}>
 					수정
 				</button>
