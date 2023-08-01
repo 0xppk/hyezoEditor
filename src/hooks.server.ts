@@ -22,6 +22,8 @@ export const handle = (async ({ event, resolve }) => {
 
 	event.locals.getUser = async () => {
 		const session = await event.locals.getSession();
+		if (!session) return null;
+
 		const { data } = await event.locals.supabase
 			.from('profiles')
 			.select('*')

@@ -20,7 +20,7 @@ export const postSchema = z.object({
 	content: z.string().min(1),
 	words_count: z.number(),
 	status: statusSchema,
-	archive_name: z.string().optional(),
+	archives: z.object({ name: z.string() }).optional(),
 });
 export const postsSchema = z.array(postSchema);
 export const postIdSchema = z.array(postSchema.pick({ id: true })).transform(arr => arr[0].id);
@@ -31,6 +31,9 @@ export const createPostResponseSuccess = z.object({
 });
 export const updatePostResponseSuccess = z.object({
 	data: postSchema,
+	success: z.boolean(),
+});
+export const deletePostResponseSuccess = z.object({
 	success: z.boolean(),
 });
 

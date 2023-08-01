@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
+	import { DEFAULT_AVATAR } from '$lib/config';
 	export let user: UserData;
 	let profile_icon: 'open' | 'close' = 'close';
 
@@ -18,7 +19,7 @@
 <div class="dropdown dropdown-end">
 	<button on:click={toggleProfileIcon} class="avatar btn btn-ghost p-0">
 		<div class="mask mask-circle mx-1 w-7">
-			<img src={user.avatar} alt="profile icon" />
+			<img src={user.avatar_url || DEFAULT_AVATAR} alt="profile icon" />
 		</div>
 	</button>
 	<ul

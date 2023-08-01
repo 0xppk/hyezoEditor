@@ -1,6 +1,3 @@
-<script lang="ts">
-</script>
-
 <aside aria-label="sidebar" class="sidebar">
 	<slot name="username" />
 	<slot name="title" />
@@ -8,15 +5,20 @@
 	<slot name="navList" />
 </aside>
 
-<style>
+<style lang="postcss">
 	.sidebar {
-		width: var(--w-sidebar);
-		cursor: default;
-		display: flex;
-		flex-direction: column;
-		align-items: stretch;
-		gap: 1rem;
-		overflow-y: auto;
-		padding: 1.2rem 0.5rem;
+		display: none;
+		width: 5rem;
+
+		@media (--desktop) {
+			display: flex;
+			width: var(--w-sidebar);
+			cursor: default;
+			flex-direction: column;
+			align-items: stretch;
+			gap: 1rem;
+			overflow-y: auto;
+			padding: 1.2rem 0.5rem;
+		}
 	}
 </style>

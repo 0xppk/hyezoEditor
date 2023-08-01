@@ -7,6 +7,7 @@
 	export let data;
 	let { supabase, user } = data;
 	$: ({ user } = data);
+
 	const profile_state = getProfileState();
 
 	let fileInput: HTMLInputElement;
@@ -30,17 +31,12 @@
 		fileInput.click();
 	}
 
-	async function saveImageAsNull() {
-		if (update_avatar === DEFAULT_AVATAR) {
-			const avatar = user.avatar?.split('/').pop();
-			if (avatar) await supabase.storage.from('avatars').remove([avatar]);
-			await supabase.from('profiles').update({ avatar_url: null }).eq('id', user.id);
-			user.avatar = update_avatar;
-		}
-	}
-
 	function showAlert() {
 		alert_state = 'show';
+	}
+
+	function hideAlert() {
+		alert_state = 'hidden';
 	}
 </script>
 
@@ -52,15 +48,17 @@
 	class="w-full"
 >
 	<!-- 프로필 타이틀, 저장/취소 버튼 -->
-	<section class="flex w-full items-center justify-between gap-6 px-5 pb-10 pt-44">
+	<section class="flex w-full items-center justify-between gap-6 px-5 pb-10 pt-[6.5rem] lg:pt-44">
 		<img
-			src={user.avatar || DEFAULT_AVATAR}
+			src={user?.avatar_url || DEFAULT_AVATAR}
 			alt="프사"
-			class="pointer-events-none z-10 h-14 w-14 rounded-full object-cover ring-1 ring-white ring-offset-4 ring-offset-white sm:h-20 sm:w-20 md:h-28 md:w-28 lg:h-40 lg:w-40"
+			class="pointer-events-none z-10 h-20 w-20 rounded-full object-cover ring-1 ring-white ring-offset-4 ring-offset-white sm:h-28 sm:w-28 md:h-32 md:w-32 lg:h-40 lg:w-40"
 		/>
 		<div class="relative flex grow flex-col">
 			<h4 class="py-6">profile</h4>
-			<p class="absolute bottom-0 text-base normal-case">Update your photo and personal details.</p>
+			<p class="absolute bottom-0 hidden text-base normal-case lg:block">
+				Update your photo and personal details.
+			</p>
 		</div>
 		<input
 			type="reset"
@@ -68,20 +66,18 @@
 			on:click={() => (update_avatar = '')}
 			class="btn btn-ghost btn-xs place-self-center"
 		/>
-		<button type="submit" on:click={saveImageAsNull} class="btn btn-ghost btn-xs place-self-center">
-			save
-		</button>
+		<button type="submit" class="btn btn-ghost btn-xs place-self-center">save</button>
 	</section>
 
 	<!-- 인풋 리스트 -->
-	<section class="w-full">
-		<div class="flex items-center justify-start gap-10">
+	<section class="flex w-full flex-col gap-2 sm:block">
+		<div class="profile-input">
 			<label for="username" class="w-52 font-bold">username</label>
 			<input id="username" type="text" name="username" class="input input-sm grow" />
 		</div>
 		<hr />
 
-		<div class="flex items-center justify-start gap-10">
+		<div class="profile-input">
 			<label for="user-website" class="w-52 font-bold">website</label>
 			<input
 				id="user-website"
@@ -93,7 +89,7 @@
 		</div>
 		<hr />
 
-		<div class="flex items-center gap-10">
+		<div class="profile-input relative">
 			<input
 				on:change={e => displaySelectedImage(e)}
 				bind:this={fileInput}
@@ -109,8 +105,8 @@
 			</div>
 
 			<img
-				src={update_avatar || user.avatar}
-				class="h-16 w-16 rounded-full object-cover"
+				src={update_avatar || user?.avatar_url || DEFAULT_AVATAR}
+				class="absolute right-4 h-16 w-16 rounded-full object-cover sm:static"
 				alt="profile"
 			/>
 
@@ -136,16 +132,27 @@
 		in:fly={{ y: 200 }}
 		out:fade
 		use:enhance
+		id="delete"
 		method="POST"
 		action="?/deleteAccount"
 		class="w-full"
 	>
 		<hr />
 		<div class="flex items-center justify-start gap-10">
-			<label for="update" class="w-52 font-bold">delete account</label>
-			<button on:click|preventDefault={showAlert} class="btn btn-warning">Delete</button>
+			<label for="delete" class="w-52 font-bold">delete account</label>
+			<button
+				disabled={!user?.id}
+				on:click|preventDefault={showAlert}
+				class="btn btn-warning disabled:btn-neutral">Delete</button
+			>
 			{#if alert_state === 'show'}
-				<Alert />
+				<Alert>
+					<svelte:fragment slot="message">탈퇴하시겠습니까?</svelte:fragment>
+					<svelte:fragment slot="button">
+						<button on:click|preventDefault={hideAlert} class="btn btn-sm">취소</button>
+						<button type="submit" class="btn btn-neutral btn-sm">확인</button>
+					</svelte:fragment>
+				</Alert>
 			{/if}
 		</div>
 	</form>
@@ -154,9 +161,26 @@
 <style lang="postcss">
 	hr {
 		margin: 1rem 0;
+		display: none;
 
 		@media (--tablet) {
 			margin: 1.25rem 0;
+			display: block;
+		}
+	}
+
+	/* flex flex-col gap-2 p-2 sm:flex-row sm:items-center sm:justify-start sm:gap-10 */
+	.profile-input {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: 0.5rem;
+
+		@media (--tablet) {
+			flex-direction: row;
+			align-items: center;
+			justify-content: start;
+			gap: 2.5rem;
 		}
 	}
 </style>

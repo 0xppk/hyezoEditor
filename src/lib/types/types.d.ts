@@ -6,6 +6,6 @@ type UserData = {
 	website: string | null;
 	updated_at: string | null;
 	avatar: string | null;
-};
+} | null;
 
 type ProfileState = 'edit' | 'delete';

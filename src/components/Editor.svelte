@@ -41,6 +41,12 @@
 		}
 	}
 
+	async function createNewArchive() {
+		const newArchive = await db.createArchive(selectedAchive.name);
+		archives.insert(newArchive);
+		selectedAchive = { id: '', name: '' };
+	}
+
 	async function createNewPost(status?: TPostStatus) {
 		await db.createNewPost({
 			title,
@@ -121,19 +127,24 @@
 	</section>
 </article>
 
+<!-- 아카이브 생성 모달 -->
 <dialog bind:this={modalDiv} class="modal modal-bottom mx-auto w-72 sm:modal-middle">
 	<form method="dialog" class="modal-box grid place-items-center gap-5">
-		<input type="text" bind:value={selectedAchive.name} class="input w-full outline-none" />
+		<label for="create-archive" class="place-self-start text-lg font-bold">새 아카이브 만들기</label
+		>
+
+		<input
+			id="create-archive"
+			type="text"
+			bind:value={selectedAchive.name}
+			class="input input-bordered w-full outline-none"
+		/>
 		<button
 			class="btn btn-ghost btn-sm w-full"
 			disabled={!selectedAchive}
-			on:click={async () => {
-				const newArchive = await db.createArchive(selectedAchive.name);
-				archives.insert(newArchive);
-				selectedAchive = { id: '', name: '' };
-			}}
+			on:click={createNewArchive}
 		>
-			만들기
+			확인
 		</button>
 	</form>
 	<form method="dialog" class="modal-backdrop fixed inset-0">

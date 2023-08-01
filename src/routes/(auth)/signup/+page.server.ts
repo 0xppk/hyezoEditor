@@ -1,11 +1,10 @@
 import { loginSchema } from '$lib/zodSchema.js';
-import { fail, type Actions, redirect } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 import { z } from 'zod';
 
 export const actions = {
 	login: async ({ request, locals: { supabase } }) => {
 		const { email, password } = loginSchema.parse(Object.fromEntries(await request.formData()));
-
 		await supabase.auth.signInWithPassword({
 			email,
 			password,
@@ -25,7 +24,6 @@ export const actions = {
 					emailRedirectTo: `${url.origin}/api/auth/callback`,
 				},
 			});
-
 			if (error) return fail(500, { message: '가입할 수 없습니다', success: false });
 
 			return {

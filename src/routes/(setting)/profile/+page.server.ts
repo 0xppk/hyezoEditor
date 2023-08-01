@@ -1,7 +1,8 @@
+import { STORAGE_URL } from '$lib/config';
 import { updateProfileSchema } from '$lib/zodSchema.js';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 
-type UpdateProfileData = { username: string; website: string; avatar_url: string };
+type UpdateProfileData = { username: string; website: string; avatar_url: string | null };
 
 export const actions = {
 	updateProfile: async ({ request, locals: { supabase, getSession, getUser } }) => {
@@ -15,12 +16,18 @@ export const actions = {
 		const updateData: Partial<UpdateProfileData> = {};
 		if (username) updateData.username = username;
 		if (website) updateData.website = website;
+
 		if (avatar && avatar.size !== 0) {
 			const uuid = crypto.randomUUID();
 			await supabase.storage.from('avatars').upload(uuid, avatar, {
 				upsert: true,
 			});
-			updateData.avatar_url = uuid;
+			updateData.avatar_url = `${STORAGE_URL}/${uuid}`;
+		} else if (avatar && avatar.size === 0) {
+			const user = await getUser();
+			const avatar = user?.avatar_url?.split('/').pop();
+			if (avatar) await supabase.storage.from('avatars').remove([avatar]);
+			updateData.avatar_url = null;
 		}
 
 		if (Object.keys(updateData).length > 0) {

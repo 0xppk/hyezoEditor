@@ -2,6 +2,7 @@ import { fetcher } from '$lib/utils';
 import {
 	archiveResponseSuccess,
 	createPostResponseSuccess,
+	deletePostResponseSuccess,
 	updatePostResponseSuccess,
 } from '$lib/zodSchema';
 import { error } from '@sveltejs/kit';
@@ -60,9 +61,23 @@ async function updatePost({ id, title, content, words_count, archive_id }: Parti
 	}
 }
 
+async function deletePost(id: number) {
+	try {
+		const result = await fetcher('/api/post', 'DELETE', {
+			id,
+		});
+		const { success } = deletePostResponseSuccess.parse(result);
+
+		return { success };
+	} catch (e) {
+		throw error(500, '포스트 삭제 에러');
+	}
+}
+
 /**
  * archive 메써드
  */
+
 async function createArchive(archive_name: string) {
 	const res = await fetcher<TArchive>('/api/archive', 'POST', {
 		name: archive_name,
@@ -76,12 +91,11 @@ async function updateArchive({ id, name }: { id: string; name: string }, index: 
 	await fetcher('/api/archive', 'PATCH', {
 		id,
 		name,
-		// todo: archives.updateName(name, i); 업데이트 후 스토어에도 바로 반영
 	});
 }
 
 async function deleteArchive(id: string) {
-	await fetcher('/api/archive', 'DELETE', {
+	const result = await fetcher('/api/archive', 'DELETE', {
 		id,
 	});
 }
@@ -90,6 +104,7 @@ export const db = {
 	createNewPost,
 	updatePublicity,
 	updatePost,
+	deletePost,
 	createArchive,
 	updateArchive,
 	deleteArchive,

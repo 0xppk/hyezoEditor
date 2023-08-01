@@ -21,3 +21,5 @@ export const navConfig = [
 ];
 
 export const DEFAULT_AVATAR = '/default_avatar.jpeg';
+export const STORAGE_URL =
+	'https://byapdwedefsixbvgcdmj.supabase.co/storage/v1/object/public/avatars';

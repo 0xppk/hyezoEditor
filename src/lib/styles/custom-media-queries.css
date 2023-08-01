@@ -1,3 +1,2 @@
-@custom-media --desktop screen and (width > 768px);
-@custom-media --tablet screen and (width > 480px);
-
+@custom-media --tablet screen and (width >= 640px);
+@custom-media --desktop screen and (width >= 768px);
