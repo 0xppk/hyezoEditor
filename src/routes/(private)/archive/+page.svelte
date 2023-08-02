@@ -57,7 +57,6 @@
 	.archive-layout {
 		display: flex;
 		width: 100%;
-		min-height: 100vh;
 		justify-content: center;
 		gap: 2rem;
 		padding: 1rem;
