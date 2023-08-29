@@ -23,8 +23,8 @@
 		action={auth_state === 'sign in' ? '?/login' : '?/register'}
 		class="form-control gap-2"
 	>
-		<input type="email" name="email" class="input" />
-		<input type="password" name="password" class="input" />
+		<input type="email" name="email" autocomplete="username" class="input" />
+		<input type="password" name="password" autocomplete="current-password" class="input" />
 		<button on:click|preventDefault={changeMode} class="text-blue-700">
 			{auth_state === 'sign in' ? "Don't you have an account?" : 'You already have an account?'}
 		</button>

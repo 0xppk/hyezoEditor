@@ -20,6 +20,11 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Between Parentheses</title>
+	<meta name="description" content="심플한 글쓰기 에디터!" />
+</svelte:head>
+
 <NavBar {user} />
 <main>
 	{#key $page.url.pathname}

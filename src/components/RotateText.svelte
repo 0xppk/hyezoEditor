@@ -101,8 +101,8 @@
 	}
 
 	:global(.icon) {
-		padding-top: 0.2rem;
 		position: absolute;
+		font-size: inherit;
 
 		&:hover {
 			background-color: transparent;
@@ -154,13 +154,13 @@
 	@keyframes long-O {
 		from,
 		to {
-			width: 3rem;
+			width: 0vw;
 		}
 		50% {
-			width: 18rem;
+			width: 20vw;
 		}
 		70% {
-			width: 18rem;
+			width: 20vw;
 		}
 	}
 

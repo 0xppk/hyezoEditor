@@ -35,17 +35,32 @@
 
 <footer class="bg-bkg font-basis text-sm">
 	<div>&nbsp;</div>
-	<div>&copy; 2023</div>
-	<div>hyezoprk</div>
+	<div>
+		<span>&copy; 2023</span>
+		<span>CONTACT</span>
+		<span>&nbsp;</span>
+		<span>If you're going to</span>
+	</div>
+	<div>
+		<span>hyezoprk</span>
+		<span>&nbsp;</span>
+		<span>☎️</span>
+		<span>do something,</span>
+	</div>
 	<div>
 		<span>&nbsp;</span>
-		<span>hyezoprk@kakao.com</span>
-		<span>아무말</span>
-		<span>대잔치를 벌여도</span>
-		<span>같은 결과일까</span>
+		<span>&nbsp;hyezoprk</span>
+		<span>010-7351-0097</span>
+		<span>&nbsp;</span>
 	</div>
-	<div>Developed by</div>
-	<div style="text-transform: uppercase;">🍑 svelte</div>
+	<div>
+		<span>Developed by</span>
+		<span>@kakao.com</span>
+		<span>&nbsp;</span>
+		<span>do it to a death!</span>
+	</div>
+
+	<div>Svelte</div>
 	<div>&nbsp;</div>
 </footer>
 
@@ -148,11 +163,15 @@
 
 		& div {
 			display: flex;
-			flex-grow: 1;
 			align-items: center;
 			justify-content: space-between;
 			border-top: 1px solid var(--border-color);
-			padding: 0.4em 1em;
+			gap: 1rem;
+			padding: 0.25em 1em;
+
+			& span {
+				width: 25%;
+			}
 		}
 	}
 </style>
