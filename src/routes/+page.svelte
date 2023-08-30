@@ -60,7 +60,12 @@
 		<span>do it to a death!</span>
 	</div>
 
-	<div>Svelte</div>
+	<div>
+		<span>Svelte</span>
+		<span>&nbsp;</span>
+		<span>&nbsp;</span>
+		<span>&nbsp;</span>
+	</div>
 	<div>&nbsp;</div>
 </footer>
 
@@ -171,6 +176,11 @@
 
 			& span {
 				width: 25%;
+				font-size: 9px;
+
+				@media (--tablet) {
+					font-size: 13px;
+				}
 			}
 		}
 	}
